@@ -1,0 +1,8 @@
+﻿.container {
+    display: block;
+    flex-direction: column;
+}
+
+body {
+    background-color: antiquewhite;
+}
