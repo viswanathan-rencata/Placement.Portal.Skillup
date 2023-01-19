@@ -4,6 +4,7 @@ namespace Placement.Portal.Skillup.Interface.Data
 {
     public interface IAppUserRepository
     {
-        Task AddUserAsync(AppUser User);
+        Task AddUserAsync(AppUser user);
+        Task<AppUser> GetUserbyId(string userName);
     }
 }

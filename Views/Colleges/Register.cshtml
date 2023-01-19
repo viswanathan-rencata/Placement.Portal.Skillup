@@ -12,6 +12,9 @@
         <img src="~/img/students-icon.png" alt="students icon" />
     </div>
     <div class="col-lg-6">
+        <div>
+            @Html.ValidationMessageFor(x=>x.UserNameMatchError)
+        </div>
         <form asp-action="Register" method="post">
             <div class="form-group">
                 <label asp-for="UserName">User Name</label>
