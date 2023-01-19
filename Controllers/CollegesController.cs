@@ -3,15 +3,21 @@ using Placement.Portal.Skillup.Interface;
 using Placement.Portal.Skillup.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
+using System.Security.Cryptography;
+using System.Text;
+using static Placement.Portal.Skillup.Models.Enum;
+using Placement.Portal.Skillup.Interface.Data;
 
 namespace Placement.Portal.Skillup.Controllers
 {
     public class CollegesController : Controller
     {
-        private readonly ICollegeMasterRepository _collegeMasterRepository;
-        public CollegesController(ICollegeMasterRepository collegeMasterRepository)
+        private readonly ICollegeMasterRepository _collegeMasterRepository;        
+        private readonly IUnitOfWork _unitOfWork;
+        public CollegesController(ICollegeMasterRepository collegeMasterRepository, IUnitOfWork unitOfWork)
         {
-            _collegeMasterRepository = collegeMasterRepository;
+            _collegeMasterRepository = collegeMasterRepository;            
+            _unitOfWork = unitOfWork;
         }
         public IActionResult Index()
         {
@@ -32,7 +38,7 @@ namespace Placement.Portal.Skillup.Controllers
         }
 
         [HttpPost]
-        public IActionResult Register(CollegeRegisterViewModel model)
+        public async Task<IActionResult> Register(CollegeRegisterViewModel model)
         {
             if(model.CollegeId == "0")
             {
@@ -41,6 +47,24 @@ namespace Placement.Portal.Skillup.Controllers
 
             if (ModelState.IsValid)
             {
+                using var hmac = new HMACSHA512();
+
+                var user = new AppUser
+                {
+                    UserName = model.UserName.ToLower(),
+                    PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(model.Password)),
+                    PasswordSalt = hmac.Key,
+                    CompanyOrCollege = (int)CompanyOrCollege.College,
+                    CollegeId = Convert.ToInt16(model.CollegeId),
+                    Status = true,
+                    Email = model.Email,
+                    PhoneNumber= model.PhoneNumber
+                };
+
+                _unitOfWork.UserRepository.AddUserAsync(user);
+
+              if (await _unitOfWork.Complete()) return RedirectToAction("Login");
+
                 return RedirectToAction("Login");
             }
             else
