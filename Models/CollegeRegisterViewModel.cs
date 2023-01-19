@@ -18,9 +18,11 @@ namespace Placement.Portal.Skillup.Models
         [Compare("Password")]
         public string ConfirmPassword { get; set; }
         
-        [Required(ErrorMessage = "College is required")]
-        public SelectListItem College { get; set; }
-        
+        [Required(ErrorMessage = "College is required")]        
+        public IEnumerable<SelectListItem> College { get; set; }
+                
+        public string CollegeId { get; set; }
+
         [Required(ErrorMessage = "Email is required")]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
