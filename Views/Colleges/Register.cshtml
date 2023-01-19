@@ -1,0 +1,52 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "_LoginLayout";
+}
+
+@model Placement.Portal.Skillup.Models.CollegeRegisterViewModel;
+
+<div class="container">
+    <div>
+        <img src="~/img/students-icon.png" alt="students icon" />
+    </div>
+    <div class="col-lg-6">
+        <form asp-action="Register" method="post">
+            <div class="form-group">
+                <label asp-for="UserName">User Name</label>
+                <input type="text" class="form-control" asp-for="UserName" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password">Password</label>
+                <input type="password" class="form-control" asp-for="Password" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConfirmPassword">Confirm Password</label>
+                <input type="password" class="form-control" asp-for="ConfirmPassword" />
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConfirmPassword">College</label>
+                <select asp-for="College" class="form-control"></select>
+                <span asp-validation-for="College" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email">Email</label>
+                <input type="email" class="form-control" asp-for="Email" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PhoneNumber">Phone Number</label>
+                <input type="text" class="form-control" asp-for="Email" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <a asp-action="login" class="link-primary mt-2">Login Here...!</a>
+            </div>
+            <button type="submit" class="btn btn-primary mt-5">Register</button>
+        </form>
+    </div>
+</div>
