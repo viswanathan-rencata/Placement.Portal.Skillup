@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Placement.Portal.Skillup.Data;
+using Placement.Portal.Skillup.Interface;
 using Placement.Portal.Skillup.Models;
 using System;
 
@@ -20,6 +22,9 @@ namespace Placement.Portal.Skillup
                 options.UseSqlServer(
                 Configuration.GetConnectionString("DefaultConnection"),
                 b => b.MigrationsAssembly(typeof(AppDBContext).Assembly.FullName)));
+
+            services.AddMemoryCache();
+            services.AddTransient<ICollegeMasterRepository, CollegeMasterRepository>();
 
             services.AddControllersWithViews();
         }

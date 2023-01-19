@@ -29,8 +29,8 @@
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ConfirmPassword">College</label>
-                <select asp-for="College" class="form-control"></select>
+                <label asp-for="CollegeId">College</label>
+                <select asp-for="CollegeId" asp-items="@Model.College" class="form-control"></select>
                 <span asp-validation-for="College" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -40,7 +40,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="PhoneNumber">Phone Number</label>
-                <input type="text" class="form-control" asp-for="Email" />
+                <input type="text" class="form-control" asp-for="PhoneNumber" />
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
