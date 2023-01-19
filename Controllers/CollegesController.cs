@@ -7,20 +7,30 @@ using System.Security.Cryptography;
 using System.Text;
 using static Placement.Portal.Skillup.Models.Enum;
 using Placement.Portal.Skillup.Interface.Data;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Placement.Portal.Skillup.Controllers
 {
     public class CollegesController : Controller
     {
-        private readonly ICollegeMasterRepository _collegeMasterRepository;        
         private readonly IUnitOfWork _unitOfWork;
-        public CollegesController(ICollegeMasterRepository collegeMasterRepository, IUnitOfWork unitOfWork)
+        private readonly IMemoryCache _memoryCache;
+        public CollegesController(IUnitOfWork unitOfWork, IMemoryCache memoryCache)
         {
-            _collegeMasterRepository = collegeMasterRepository;            
             _unitOfWork = unitOfWork;
+            _memoryCache = memoryCache;
         }
+
+        [Authorize]
         public IActionResult Index()
         {
+            var username = HttpContext.User.Identity.Name;
+            var customClaim = HttpContext.User.FindFirst("CompanyOrCollege");
+            ViewBag.UserName = username;
             return View();
         }
 
@@ -31,22 +41,27 @@ namespace Placement.Portal.Skillup.Controllers
 
         public IActionResult Register()
         {
-            var collegeRegisteVM = new CollegeRegisterViewModel();
-            var clgList = _collegeMasterRepository.GetAll();
-            collegeRegisteVM.College = GetDropDownItems(clgList);
-            return View(collegeRegisteVM);
+            return View(GetCollegeRegisterViewModel());
         }
 
         [HttpPost]
         public async Task<IActionResult> Register(CollegeRegisterViewModel model)
         {
-            if(model.CollegeId == "0")
+            if (model.CollegeId == "0")
             {
                 ModelState.AddModelError("CollegeValidation", "Please select any College Name");
             }
 
             if (ModelState.IsValid)
             {
+                var userFromDb = await _unitOfWork.UserRepository.GetUserbyId(model.UserName);
+
+                if (userFromDb is not null)
+                {
+                    ModelState.AddModelError("UserNameMatchError", "UserName is already exists..!");
+                    return View(GetCollegeRegisterViewModel());
+                }
+
                 using var hmac = new HMACSHA512();
 
                 var user = new AppUser
@@ -58,22 +73,81 @@ namespace Placement.Portal.Skillup.Controllers
                     CollegeId = Convert.ToInt16(model.CollegeId),
                     Status = true,
                     Email = model.Email,
-                    PhoneNumber= model.PhoneNumber
+                    PhoneNumber = model.PhoneNumber
                 };
 
-                _unitOfWork.UserRepository.AddUserAsync(user);
+                await _unitOfWork.UserRepository.AddUserAsync(user);
 
-              if (await _unitOfWork.Complete()) return RedirectToAction("Login");
+                if (await _unitOfWork.Complete()) return View(GetCollegeRegisterViewModel());
 
                 return RedirectToAction("Login");
             }
             else
             {
-                var collegeRegisteVM = new CollegeRegisterViewModel();
-                var clgList = _collegeMasterRepository.GetAll();
-                collegeRegisteVM.College = GetDropDownItems(clgList);
-                return View(collegeRegisteVM);
+                return View(GetCollegeRegisterViewModel());
             }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _unitOfWork.UserRepository.GetUserbyId(model.UserName);
+
+                if (user == null)
+                {
+                    ModelState.AddModelError("PasswordMatchError", "UserName/Password is incorrect");
+                    return View();
+                }
+                else
+                {
+                    if (!user.Status)
+                    {
+                        ModelState.AddModelError("UserInactiveError", $"{model.UserName} is inactive.Please contact administrator. ");
+                        return View();
+                    }
+                }
+
+                using var hmac = new HMACSHA512(user.PasswordSalt);
+                var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(model.Password));
+
+                if (!computedHash.SequenceEqual(user.PasswordHash))
+                {
+                    ModelState.AddModelError("PasswordMatchError", "UserName/Password is incorrect");
+                    return View();
+                }
+
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim(ClaimTypes.Email, user.Email),
+                    new Claim("CompanyOrCollege", user.CompanyOrCollege.ToString())
+                };
+
+                var claimsIdentity = new ClaimsIdentity(
+                    claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                var authProperties = new AuthenticationProperties { IsPersistent = true };
+
+                await HttpContext.SignInAsync(
+                    CookieAuthenticationDefaults.AuthenticationScheme,
+                    new ClaimsPrincipal(claimsIdentity),
+                    authProperties);
+
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return View();
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync();
+            return RedirectToAction("Index", "Dashboard");
         }
 
         private List<SelectListItem> GetDropDownItems(List<CollegeMaster> list)
@@ -85,6 +159,14 @@ namespace Placement.Portal.Skillup.Controllers
                 dropdownList.Add(new SelectListItem { Text = item.Name, Value = item.ID.ToString() });
             }
             return dropdownList;
+        }
+
+        private CollegeRegisterViewModel GetCollegeRegisterViewModel()
+        {
+            var collegeRegisteVM = new CollegeRegisterViewModel();
+            var clgList = _unitOfWork.CollegeMasterRepository.GetAll();
+            collegeRegisteVM.College = GetDropDownItems(clgList);
+            return collegeRegisteVM;
         }
     }
 }

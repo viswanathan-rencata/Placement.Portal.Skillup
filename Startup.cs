@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.EntityFrameworkCore;
 using Placement.Portal.Skillup.Data;
 using Placement.Portal.Skillup.Interface;
 using Placement.Portal.Skillup.Interface.Data;
@@ -30,6 +31,14 @@ namespace Placement.Portal.Skillup
             services.AddTransient<IUnitOfWork, UnitOfWork>();
 
             services.AddControllersWithViews();
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                    .AddCookie(options =>
+                    {
+                        options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+                        options.SlidingExpiration = true;
+                        options.AccessDeniedPath = "/Forbidden/";                        
+                    });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,13 +58,14 @@ namespace Placement.Portal.Skillup
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
             
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                    name: "default",
-                   pattern: "{controller=Dashboard}/{action=Index}/{id?}");                         
+                   pattern: "{controller=Dashboard}/{action=Index}/{id?}");
             });            
         }
     }

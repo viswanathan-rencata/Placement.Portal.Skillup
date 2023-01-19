@@ -30,5 +30,7 @@ namespace Placement.Portal.Skillup.Models
         [Required(ErrorMessage = "PhoneNumber is required")]
         [DataType(DataType.PhoneNumber)]
         public string PhoneNumber { get; set; }
+
+        public string UserNameMatchError { get; set; }
     }
 }
