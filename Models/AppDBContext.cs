@@ -7,5 +7,6 @@ namespace Placement.Portal.Skillup.Models
         public AppDBContext(DbContextOptions<AppDBContext> options) : base(options) { }
 
         public DbSet<CollegeMaster> CollegeMaster { get;set;}
+        public DbSet<AppUser> AppUser { get; set; }
     }
 }

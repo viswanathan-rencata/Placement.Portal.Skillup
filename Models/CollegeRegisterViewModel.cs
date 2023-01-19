@@ -5,22 +5,22 @@ namespace Placement.Portal.Skillup.Models
 {
     public class CollegeRegisterViewModel
     {
-        [Required(ErrorMessage ="User Name is required.")]
+        [Required(ErrorMessage = "User Name is required.")]
         [StringLength(20, ErrorMessage = "Must be between 5 and 20 characters", MinimumLength = 5)]
         public string UserName { get; set; }
-        
+
         [Required(ErrorMessage = "Password is required.")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
-        
+
         [Required(ErrorMessage = "Confirm Password is required")]
         [DataType(DataType.Password)]
         [Compare("Password")]
         public string ConfirmPassword { get; set; }
         
-        [Required(ErrorMessage = "College is required")]        
         public IEnumerable<SelectListItem> College { get; set; }
-                
+
+        [Required(ErrorMessage = "College is required")]
         public string CollegeId { get; set; }
 
         [Required(ErrorMessage = "Email is required")]

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Placement.Portal.Skillup.Data;
 using Placement.Portal.Skillup.Interface;
+using Placement.Portal.Skillup.Interface.Data;
 using Placement.Portal.Skillup.Models;
 using System;
 
@@ -25,6 +26,8 @@ namespace Placement.Portal.Skillup
 
             services.AddMemoryCache();
             services.AddTransient<ICollegeMasterRepository, CollegeMasterRepository>();
+            services.AddTransient<IAppUserRepository, AppUserRepository>();
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
 
             services.AddControllersWithViews();
         }
