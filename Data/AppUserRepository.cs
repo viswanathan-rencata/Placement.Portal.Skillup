@@ -23,5 +23,10 @@ namespace Placement.Portal.Skillup.Data
         {
             return await _dbContext.AppUser.SingleOrDefaultAsync(x => x.UserName == userName.ToLower());
         }
+
+        public async Task<List<AppUser>> GetAllUser()
+        {
+            return await _dbContext.AppUser.ToListAsync();
+        }
     }
 }

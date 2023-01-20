@@ -58,7 +58,15 @@ namespace Placement.Portal.Skillup.Controllers
                 if (userFromDb is not null)
                 {
                     ModelState.AddModelError("UserNameMatchError", "UserName is already exists..!");
-                    return View(GetCollegeRegisterViewModel());
+                    return View(GetCollegeRegisterViewModel(true));
+                }
+
+                var allUsers = await _unitOfWork.UserRepository.GetAllUser();
+
+                if(allUsers.Any(x=>x.CollegeId == Convert.ToInt16(model.CollegeId)))
+                {
+                    ModelState.AddModelError("CollegeSelectionError", "Selected college is already registered. Please contact administrator.");
+                    return View(GetCollegeRegisterViewModel(true));
                 }
 
                 using var hmac = new HMACSHA512();
@@ -80,12 +88,12 @@ namespace Placement.Portal.Skillup.Controllers
                 if (await _unitOfWork.Complete()) return RedirectToAction("Login");
                 else
                 {
-                    return View(GetCollegeRegisterViewModel());
+                    return View(GetCollegeRegisterViewModel(true));
                 }
             }
             else
             {
-                return View(GetCollegeRegisterViewModel());
+                return View(GetCollegeRegisterViewModel(true));
             }
         }
 
@@ -173,11 +181,12 @@ namespace Placement.Portal.Skillup.Controllers
             return dropdownList;
         }
 
-        private CollegeRegisterViewModel GetCollegeRegisterViewModel()
+        private CollegeRegisterViewModel GetCollegeRegisterViewModel(bool isRegistrationFailed = false)
         {
             var collegeRegisteVM = new CollegeRegisterViewModel();
             var clgList = _unitOfWork.CollegeMasterRepository.GetAll();
             collegeRegisteVM.College = GetDropDownItems(clgList);
+            collegeRegisteVM.IsRegistrationFailed = isRegistrationFailed;
             return collegeRegisteVM;
         }
     }

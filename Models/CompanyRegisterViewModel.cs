@@ -32,5 +32,7 @@ namespace Placement.Portal.Skillup.Models
         public string PhoneNumber { get; set; }
 
         public string UserNameMatchError { get; set; }
+        public string CompanySelectionError { get; set; }
+        public bool IsRegistrationFailed { get; set; }        
     }
 }
