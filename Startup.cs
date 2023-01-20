@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Placement.Portal.Skillup.Data;
+using Placement.Portal.Skillup.Extensions;
 using Placement.Portal.Skillup.Interface;
 using Placement.Portal.Skillup.Interface.Data;
 using Placement.Portal.Skillup.Models;
@@ -26,9 +27,7 @@ namespace Placement.Portal.Skillup
                 b => b.MigrationsAssembly(typeof(AppDBContext).Assembly.FullName)));
 
             services.AddMemoryCache();
-            services.AddTransient<ICollegeMasterRepository, CollegeMasterRepository>();
-            services.AddTransient<IAppUserRepository, AppUserRepository>();
-            services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddApplicationServices();
 
             services.AddControllersWithViews();
 
