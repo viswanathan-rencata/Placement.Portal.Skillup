@@ -34,7 +34,8 @@ namespace Placement.Portal.Skillup.Controllers
 
         public IActionResult Login()
         {
-            return View();
+            LoginViewModel model = new();
+            return View(model);
         }
 
         public IActionResult Register()
@@ -98,19 +99,22 @@ namespace Placement.Portal.Skillup.Controllers
                 if (user == null)
                 {
                     ModelState.AddModelError("PasswordMatchError", "UserName/Password is incorrect");
-                    return View();
+                    model.IsLoginSucceed = false;
+                    return View(model);
                 }
                 else
                 {
                     if (!user.Status)
                     {
                         ModelState.AddModelError("UserInactiveError", $"{model.UserName} is inactive.Please contact administrator. ");
-                        return View();
+                        model.IsLoginSucceed = false;
+                        return View(model);
                     }
                     else if (user.CompanyOrCollege == (int)CompanyOrCollege.Company)
                     {
                         ModelState.AddModelError("UserInactiveError", $"{model.UserName} is invalid");
-                        return View();
+                        model.IsLoginSucceed = false;
+                        return View(model);
                     }
                 }
 
@@ -120,7 +124,8 @@ namespace Placement.Portal.Skillup.Controllers
                 if (!computedHash.SequenceEqual(user.PasswordHash))
                 {
                     ModelState.AddModelError("PasswordMatchError", "UserName/Password is incorrect");
-                    return View();
+                    model.IsLoginSucceed = false;
+                    return View(model);
                 }
 
                 var claims = new List<Claim>
@@ -144,7 +149,9 @@ namespace Placement.Portal.Skillup.Controllers
             }
             else
             {
-                return View();
+
+                model.IsLoginSucceed = false;
+                return View(model);
             }
         }
 
