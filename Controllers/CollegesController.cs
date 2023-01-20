@@ -18,17 +18,34 @@ namespace Placement.Portal.Skillup.Controllers
     public class CollegesController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
-        public CollegesController(IUnitOfWork unitOfWork)
+        private readonly ICollegeMasterRepository _studRepo;
+        public CollegesController(IUnitOfWork unitOfWork, ICollegeMasterRepository studRepo)
         {
             _unitOfWork = unitOfWork;
+            _studRepo = studRepo;
         }
 
         [Authorize]
-        public IActionResult Index()
+        public ViewResult Index()
         {
             var username = HttpContext.User.Identity.Name;
             var customClaim = HttpContext.User.FindFirst("CompanyOrCollege");
             ViewBag.UserName = username;
+
+            CollegeDetails _collegeDetails = new CollegeDetails();
+            _collegeDetails.collegeMaster = new CollegeMaster();
+            List<Students> dataMapping = _studRepo.GetStudents();
+            if (dataMapping.FirstOrDefault()  != null)
+            {               
+                _collegeDetails.students = dataMapping.ToList();
+            }           
+            return View(_collegeDetails);     
+             
+        }
+        
+        // GET: CollegeDashboard/Details/5
+        public ActionResult Details(int id)
+        {
             return View();
         }
 

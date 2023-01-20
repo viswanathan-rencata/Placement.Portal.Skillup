@@ -4,3 +4,567 @@
 @{
     Layout = "_CollegeLayout";
 }
+
+@model Placement.Portal.Skillup.Models.CollegeDetails
+
+@*<link href="~/collegedashboard/bootstrap.min.css" rel="stylesheet" />
+<script src="~/collegedashboard/bootstrap.min.js"></script>
+<script src="~/collegedashboard/jquery-1.11.1.min.js"></script>*@
+
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
+<script src="http://getbootstrap.com/dist/js/bootstrap.min.js"></script>
+
+
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+
+<script src="https://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
+
+
+
+<style>
+    /*.container {
+
+                                                                            background: -webkit-linear-gradient(90deg, #16222A 10%, #3A6073 90%);
+                                                                            background: -moz-linear-gradient(90deg, #16222A 10%, #3A6073 90%);
+                                                                            background: -o-linear-gradient(90deg, #16222A 10%, #3A6073 90%);
+                                                                            background: linear-gradient(90deg, #16222A 10%, #3A6073 90%);
+                                                                            font-family: 'Raleway', sans-serif;
+                                                                            }*/
+
+
+
+    .filterable {
+        margin-top: 15px;
+    }
+
+        .filterable .panel-heading .pull-right {
+            margin-top: -20px;
+        }
+
+        .filterable .filters input[disabled] {
+            background-color: transparent;
+            border: none;
+            cursor: auto;
+            box-shadow: none;
+            padding: 0;
+            height: auto;
+        }
+
+            .filterable .filters input[disabled]::-webkit-input-placeholder {
+                color: #333;
+            }
+
+            .filterable .filters input[disabled]::-moz-placeholder {
+                color: #333;
+            }
+
+            .filterable .filters input[disabled]:-ms-input-placeholder {
+                color: #333;
+            }
+
+    /*body {
+                                background-color: #6D5959;
+                            }
+
+                                body * {
+                                    font-family: 'Montserrat' sans-serif;
+                                }*/
+
+
+
+    .mat-label {
+        display: block;
+        font-size: 16px;
+        transform: translateY(25px);
+        color: #e2e2e2;
+        transition: all 0.5s;
+    }
+
+    .mat-input {
+        position: relative;
+        background: transparent;
+        width: 100%;
+        border: none;
+        outline: none;
+        padding: 8px 0;
+        font-size: 16px;
+    }
+
+    .mat-div {
+        padding: 30px 0 0 0;
+        position: relative;
+    }
+
+        .mat-div:after, .mat-div:before {
+            content: "";
+            position: absolute;
+            display: block;
+            width: 100%;
+            height: 2px;
+            background-color: #e2e2e2;
+            bottom: 0;
+            left: 0;
+            transition: all 0.5s;
+        }
+
+        .mat-div::after {
+            background-color: #8E8DBE;
+            transform: scaleX(0);
+        }
+
+    .is-active::after {
+        transform: scaleX(1);
+    }
+
+    .is-active .mat-label {
+        color: #8E8DBE;
+    }
+
+    .is-completed .mat-label {
+        font-size: 12px;
+        transform: translateY(0);
+    }
+
+    button {
+        background-color: #93E1D8;
+        border: none;
+        display: block;
+        margin: 35px auto;
+        padding: 15px 30px;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+
+</style>
+<script>
+    $(document).ready(function () {
+        $("#mytable #checkall").click(function () {
+            if ($("#mytable #checkall").is(':checked')) {
+                $("#mytable input[type=checkbox]").each(function () {
+                    $(this).prop("checked", true);
+                });
+
+            } else {
+                $("#mytable input[type=checkbox]").each(function () {
+                    $(this).prop("checked", false);
+                });
+            }
+        });
+
+        $("[data-toggle=tooltip]").tooltip();
+
+        $('.filterable .btn-filter').click(function () {
+            var $panel = $(this).parents('.filterable'),
+                $filters = $panel.find('.filters input'),
+                $tbody = $panel.find('.table tbody');
+            if ($filters.prop('disabled') == true) {
+                $filters.prop('disabled', false);
+                $filters.first().focus();
+            } else {
+                $filters.val('').prop('disabled', true);
+                $tbody.find('.no-result').remove();
+                $tbody.find('tr').show();
+            }
+        });
+
+        $('.filterable .filters input').keyup(function (e) {
+            /* Ignore tab key */
+            var code = e.keyCode || e.which;
+            if (code == '9') return;
+            /* Useful DOM data and selectors */
+            var $input = $(this),
+                inputContent = $input.val().toLowerCase(),
+                $panel = $input.parents('.filterable'),
+                column = $panel.find('.filters th').index($input.parents('th')),
+                $table = $panel.find('.table'),
+                $rows = $table.find('tbody tr');
+            /* Dirtiest filter function ever ;) */
+            var $filteredRows = $rows.filter(function () {
+
+                var value = $(this).find('td').eq(column).text().toLowerCase();
+                return value.indexOf(inputContent) === -1;
+            });
+            /* Clean previous no-result if exist */
+            $table.find('tbody .no-result').remove();
+            /* Show all rows, hide filtered ones (never do that outside of a demo ! xD) */
+            $rows.show();
+            $filteredRows.hide();
+            /* Prepend no-result row if all rows are filtered */
+            if ($filteredRows.length === $rows.length) {
+                $table.find('tbody').prepend($('<tr class="no-result text-center"><td colspan="' + $table.find('.filters th').length + '">No result found</td></tr>'));
+            }
+        });
+
+        $("#myDialog").dialog({
+            autoOpen: false,
+            modal: true,
+            height: 700,
+            width: 600,
+            scroll: true,
+            title: "Add New Student",
+            show: {
+                effect: "Fade",
+                duration: 1000
+            },
+            hide: {
+                effect: "Fade",
+                duration: 1000
+            },
+            buttons: {
+                'Submit': function () {
+                    var textValue = $('#myTextBox').val();
+                    alert('The value of the text box is ' + textValue);
+                    //Now you have the value of the textbox, you can do something with it, maybe an AJAX call to your server!
+                }
+                //,
+                //'Close': function () {
+                //    alert('The Close button was clicked');
+                //    $(this).dialog('close');
+                //}
+            }
+        });
+
+        //Open the dialog box when the button is clicked.
+        $('#clickMe').click(function () {
+            $("#myDialog").dialog("open");
+        });
+
+        $(".mat-input").focus(function () {
+            $(this).parent().addClass("is-active is-completed");
+        });
+
+        $(".mat-input").focusout(function () {
+            if ($(this).val() === "")
+                $(this).parent().removeClass("is-completed");
+            $(this).parent().removeClass("is-active");
+        });
+
+        //$("#btnOffer").click(function (e) {
+        //    e.preventDefault();
+        //    window.location.href = "File/functionalsample.pdf";
+        //});
+        $('.btnOffer').click(function (e) {
+            e.preventDefault();  //stop the browser from following
+            window.location.href = 'File/functionalsample.pdf';
+        });
+
+    });
+</script>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h2><i class="glyphicon glyphicon-user"></i> College </h2>
+        </div>
+        <div class="col-md-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Student</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="card">
+                        <div class="card-header">
+                            Ted James
+                        </div>
+                        <div class="card-body">
+                            <div class="float-left">
+                                <img src="" />
+                            </div>
+                            <div class="float-right">
+                                <p>Pheniox Arizona</p>
+                                <a href="#">Go somewhere</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="card">
+                        <div class="card-header">
+                            Ted James
+                        </div>
+                        <div class="card-body">
+                            <div class="float-left">
+                                <img src="" />
+                            </div>
+                            <div class="float-right">
+                                <p>Pheniox Arizona</p>
+                                <a href="#">Go somewhere</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="card">
+                        <div class="card-header">
+                            Ted James
+                        </div>
+                        <div class="card-body">
+                            <div class="float-left">
+                                <img src="" />
+                            </div>
+                            <div class="float-right">
+                                <p>Pheniox Arizona</p>
+                                <a href="#">Go somewhere</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="card">
+                        <div class="card-header">
+                            Ted James
+                        </div>
+                        <div class="card-body">
+                            <div class="float-left">
+                                <img src="" />
+                            </div>
+                            <div class="float-right">
+                                <p>Pheniox Arizona</p>
+                                <a href="#">Go somewhere</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="card">
+                        <div class="card-header">
+                            Ted James
+                        </div>
+                        <div class="card-body">
+                            <div class="float-left">
+                                <img src="" />
+                            </div>
+                            <div class="float-right">
+                                <p>Pheniox Arizona</p>
+                                <a href="#">Go somewhere</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="card">
+                        <div class="card-header">
+                            Ted James
+                        </div>
+                        <div class="card-body">
+                            <div class="float-left">
+                                <img src="" />
+                            </div>
+                            <div class="float-right">
+                                <p>Pheniox Arizona</p>
+                                <a href="#">Go somewhere</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+    </div>
+
+
+    <div class="table-responsive filterable" style="height:530px!important;overflow-y:scroll!important">
+        <div class="panel-heading">
+            <button class="btn btn-primary" id="clickMe">Add Student</button>
+            <div class="pull-right">
+                <button class="btn btn-default btn-xs btn-filter"><span class="glyphicon glyphicon-filter"></span> Filter</button>
+            </div>
+        </div>
+
+        <table id="mytable" class="table table-bordred table-striped">
+
+            @* <a href="#" class="btn btn-primary btn-xs pull-right"><b>+</b> Add Student</a>*@
+            <thead>
+                <tr class="filters">
+                    <th><input type="text" class="form-control" placeholder="Id" disabled></th>
+                    <th><input type="text" class="form-control" placeholder="Name" disabled></th>
+                    <th><input type="text" class="form-control" placeholder="Gender" disabled></th>
+                    <th style="display:none"><input type="text" class="form-control" placeholder="Email" disabled></th>
+                    <th style="display:none"><input type="text" class="form-control" placeholder="DOB" disabled></th>
+                    <th style="display:none"><input type="text" class="form-control" placeholder="DOJ" disabled></th>
+                    <th><input type="text" class="form-control" placeholder="Class" disabled></th>
+                    <th><input type="text" class="form-control" placeholder="Department" disabled></th>
+                    <th><input type="text" class="form-control" placeholder="Phone Number" disabled></th>
+                    <th><input type="text" class="form-control" placeholder="Address" disabled></th>
+                    <th><input type="text" class="form-control" placeholder="Action" disabled readonly></th>
+                </tr>
+
+                @*<th>Delete</th>*@
+            </thead>
+            <tbody>
+                @foreach (var item in Model.students)
+                {
+                    <tr>
+                        <td style="width:60px">
+                            @item.Id
+                        </td>
+                        <td style="width:80px">
+                            @item.FirstName @item.MiddleName @item.LastName
+                        </td>
+                        <td style="width:70px">
+                            @item.Gender
+                        </td>
+                        <td style="display:none;width:1px">
+                            @item.Email
+                        </td>
+                        <td style="display:none;width:1px">
+                            @item.DOJ.ToString("MM/dd/yyyy")
+                        </td>
+                        <td style="display:none;width:1px">
+                            @item.DOB.ToString("MM/dd/yyyy")
+                        </td>
+                        <td style="width:70px">
+                            @item.ClassName
+                        </td>
+                        <td style="width:70px">
+                            @item.Dept
+                        </td>
+                        <td style="width:70px">
+                            @item.PhoneNumber
+                        </td>
+                        <td style="width:100px">
+                            @item.Address
+                        </td>
+                        <td style="width:40px">
+
+                            <a class="btnOffer" href="no-script.html">
+                                <span class="glyphicon glyphicon-download-alt">
+                                </span>
+                            </a>
+
+
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    <div id="myDialog">
+        <div class="modal-body">
+            @*<div class="form-group">
+            <input class="form-control " type="text" placeholder="Mohsin">
+            </div>
+            <div class="form-group">
+            <input class="form-control " type="text" placeholder="Irshad">
+            </div>
+            <div class="form-group">
+            <textarea rows="2" id="studAddress" class="form-control" placeholder="CB 106/107 Street # 11 Wah Cantt Islamabad Pakistan"></textarea>
+            </div>*@
+            <div class="mat-div">
+                <label for="first-name" class="mat-label">First Name</label>
+                <input type="text" class="mat-input" id="first-name">
+            </div>
+
+            <div class="mat-div">
+                <label for="first-name" class="mat-label">Middle Name</label>
+                <input type="text" class="mat-input" id="middle-name">
+            </div>
+
+            <div class="mat-div">
+                <label for="first-name" class="mat-label">Last Name</label>
+                <input type="text" class="mat-input" id="last-name">
+            </div>
+
+            <div class="mat-div">
+                <select class="mat-input" id="stud-gender">
+                    <option>Male</option>
+                    <option>Female</option>
+                </select>
+            </div>
+            <div class="mat-div">
+                <label for="first-name" class="mat-label">Email</label>
+                <input type="email" class="mat-input" id="email-id">
+            </div>
+
+            <div class="mat-div">
+                <label for="address" class="mat-label">Address</label>
+                <input type="text" class="mat-input" id="stud-address">
+            </div>
+            <div class="mat-div">
+                <label for="address" class="mat-label">Date of birth</label>
+                <input type="date" class="mat-input" id="stud-dataofbirth">
+            </div>
+            <div class="mat-div">
+                <label for="address" class="mat-label">Date of join</label>
+                <input type="date" class="mat-input" id="stud-dateofjoin">
+            </div>
+            <div class="mat-div">
+                <select class="mat-input" id="stud-dept">
+                    <option>Information Technology</option>
+                    <option>Science</option>
+                    <option>Nural Network</option>
+                    <option>Mining</option>
+                </select>
+            </div>
+            <div class="mat-div">
+                <select class="mat-input" id="stud-dept">
+                    <option>MCA</option>
+                    <option>MSC</option>
+                    <option>Data Mining</option>
+                    <option>CCNA Network Programming</option>
+                </select>
+            </div>
+            <div class="mat-div">
+                <label for="address" class="mat-label">Phone Number</label>
+                <input type="number" class="mat-input" id="stud-phonenumber">
+            </div>
+            <div class="mat-div">
+                <label for="address" class="mat-label">Percentage</label>
+                <input type="number" class="mat-input" id="stud-percentage">
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                    <h4 class="modal-title custom_align" id="Heading">Edit Your Detail</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="text" id="myTextBox" />
+                    <div class="form-group">
+                        <input class="form-control " type="text" placeholder="Mohsin">
+                    </div>
+                    <div class="form-group">
+
+                        <input class="form-control " type="text" placeholder="Irshad">
+                    </div>
+                    <div class="form-group">
+                        <textarea rows="2" class="form-control" placeholder="CB 106/107 Street # 11 Wah Cantt Islamabad Pakistan"></textarea>
+
+
+                    </div>
+                </div>
+                <div class="modal-footer ">
+                    <button type="button" class="btn btn-warning btn-lg" style="width: 100%;"><span class="glyphicon glyphicon-ok-sign"></span> Update</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+</div>
+
+
+
+
+
+
