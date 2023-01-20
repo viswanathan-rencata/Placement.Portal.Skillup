@@ -18,11 +18,9 @@ namespace Placement.Portal.Skillup.Controllers
     public class CollegesController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IMemoryCache _memoryCache;
-        public CollegesController(IUnitOfWork unitOfWork, IMemoryCache memoryCache)
+        public CollegesController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _memoryCache = memoryCache;
         }
 
         [Authorize]
@@ -49,7 +47,7 @@ namespace Placement.Portal.Skillup.Controllers
         {
             if (model.CollegeId == "0")
             {
-                ModelState.AddModelError("CollegeValidation", "Please select any College Name");
+                ModelState.AddModelError("College", "Please select any College Name");
             }
 
             if (ModelState.IsValid)
@@ -78,9 +76,11 @@ namespace Placement.Portal.Skillup.Controllers
 
                 await _unitOfWork.UserRepository.AddUserAsync(user);
 
-                if (await _unitOfWork.Complete()) return View(GetCollegeRegisterViewModel());
-
-                return RedirectToAction("Login");
+                if (await _unitOfWork.Complete()) return RedirectToAction("Login");
+                else
+                {
+                    return View(GetCollegeRegisterViewModel());
+                }
             }
             else
             {
@@ -105,6 +105,11 @@ namespace Placement.Portal.Skillup.Controllers
                     if (!user.Status)
                     {
                         ModelState.AddModelError("UserInactiveError", $"{model.UserName} is inactive.Please contact administrator. ");
+                        return View();
+                    }
+                    else if (user.CompanyOrCollege == (int)CompanyOrCollege.Company)
+                    {
+                        ModelState.AddModelError("UserInactiveError", $"{model.UserName} is invalid");
                         return View();
                     }
                 }
