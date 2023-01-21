@@ -42,14 +42,12 @@ namespace Placement.Portal.Skillup.Data
             user = _memoryCache.Get<AppUser>("AppUser");
             list = _memoryCache.Get<List<Students>>("Students");
 
-            if (list is null)
+            if (_dbContext.Students.FirstOrDefault() != null)
             {
-                if (_dbContext.Students.FirstOrDefault() != null)
-                {
-                    list = _dbContext.Students.Where(x => x.CollegeId == user.CollegeId).ToList();
-                    _memoryCache.Set("Students", list);
-                }
+                list = _dbContext.Students.Where(x => x.CollegeId == user.CollegeId).ToList();
+                _memoryCache.Set("Students", list);
             }
+
             return list;
         }
     }

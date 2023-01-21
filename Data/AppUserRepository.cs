@@ -24,6 +24,7 @@ namespace Placement.Portal.Skillup.Data
         public async Task<AppUser> GetUserbyId(string userName)
         {
             var dataMap = await _dbContext.AppUser.SingleOrDefaultAsync(x => x.UserName == userName.ToLower());
+            _memoryCache.Remove("AppUser");
             _memoryCache.Set("AppUser", dataMap);
             return dataMap;
         }

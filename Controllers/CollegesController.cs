@@ -38,7 +38,10 @@ namespace Placement.Portal.Skillup.Controllers
             if (dataMapping.FirstOrDefault()  != null)
             {               
                 _collegeDetails.students = dataMapping.ToList();
-            }           
+            }
+
+            //ViewBag.CollegeName = "";
+
             return View(_collegeDetails);     
              
         }
