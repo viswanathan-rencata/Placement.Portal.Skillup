@@ -29,7 +29,7 @@ namespace Placement.Portal.Skillup
             services.AddMemoryCache();
             services.AddApplicationServices();
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();            
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                     .AddCookie(options =>
