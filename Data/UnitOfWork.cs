@@ -18,6 +18,7 @@ namespace Placement.Portal.Skillup.Data
         public IAppUserRepository UserRepository => new AppUserRepository(_context);
         public ICollegeMasterRepository CollegeMasterRepository => new CollegeMasterRepository(_context, _memoryCache);
         public ICompanyMasterRepository CompanyMasterRepository => new CompanyMasterRepository(_context, _memoryCache);
+        public ICompanyRequestRepository CompanyRequestRepository => new CompanyRequestRepository(_context);
 
         public async Task<bool> Complete()
         {
