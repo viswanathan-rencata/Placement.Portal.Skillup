@@ -7,12 +7,12 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    
+    <script src="~/js/college.js" asp-append-version="true"></script>
     <link rel="stylesheet" href="~/css/college.css" asp-append-version="true" />
 
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    @*<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>*@
 
     <style>
         header, footer {
@@ -165,11 +165,13 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Welcome, @ViewBag.UserName
-
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">User Profile</a></li>
-                                <li><a class="dropdown-item" href="#">Another action</a></li>
+                                <li>
+                                    <button type="button" id="profile" class="btn btn-outline-dark btn-profile" onc>
+                                        User Profile
+                                    </button>
+                                </li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
                                     <form asp-action="Logout" method="post">
@@ -210,6 +212,22 @@
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-center">
                     @RenderBody()
                     @*Created for <a href="https://easetemplate.com/downloads/digital-marketing-website-template-hike-bold-design/" target="_blank">easetemplate</a>*@
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Profile</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <div class="text-center"><button id="btnusrPrfSubmit" class="btn btn-primary profile-button" type="button">Save Profile</button></div>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
