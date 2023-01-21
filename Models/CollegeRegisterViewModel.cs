@@ -29,6 +29,8 @@ namespace Placement.Portal.Skillup.Models
 
         [Required(ErrorMessage = "PhoneNumber is required")]
         [DataType(DataType.PhoneNumber)]
+        [StringLength(10, ErrorMessage = "Must be 10 digits", MinimumLength = 10)]
+        [RegularExpression(@"^[0-9]$", ErrorMessage = "Input should contain only numbers")]
         public string PhoneNumber { get; set; }
 
         public string UserNameMatchError { get; set; }
