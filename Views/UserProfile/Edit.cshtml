@@ -1,0 +1,130 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@model UserProfileViewModel;
+
+<form id="userProfileForm">
+    <div class="container rounded bg-white mt-5 mb-5">
+        <div class="row">
+            <div class="col-md-3 border-right">
+                <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                    <img class="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg">
+                    <span class="font-weight-bold">@Model.UserName</span>
+                    <span class="text-black-50">@Model.ProfileEmailAddress</span>                    
+                    <span> </span>
+                </div>
+            </div>
+            <div class="col-md-5 border-right">
+                <div class="p-3 py-5">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="text-right">Profile Settings</h4>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="">
+                            @Html.HiddenFor(x=>x.Id)
+                        </div>
+                        <div class="col-md-12">
+                            <label class="labels" asp-for="UserName">User Name</label>
+                            <input type="text" class="form-control" placeholder="user name" asp-for="UserName" readonly="readonly">
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <label class="labels" asp-for="PhoneNumber">Mobile Number</label>
+                            <input type="text" class="form-control" placeholder="enter phone number" asp-for="PhoneNumber">
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="labels" asp-for="Email">Email ID</label>
+                            <input type="text" class="form-control" placeholder="enter email id" asp-for="Email">
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="labels" asp-for="Education">Education</label>
+                            <input type="text" class="form-control" placeholder="education" asp-for="Education">
+                            <span asp-validation-for="Education" class="text-danger"></span>
+                        </div>
+                    </div>
+                    @if (Model.IsUpdateSuccess)
+                    {
+                        <div class="card border-success mt-5">
+                            <div class="card-body text-success">                                
+                                <span class="card-text" asp-validation-for="UpdateSuccess"></span>                                
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-3 py-5">
+                    <div class="row mt-5">
+                        <div class="d-flex justify-content-between align-items-center experience"><span>Address</span></div><br>
+                        <div class="col-md-12">
+                            <label class="labels" asp-for="AddressLine1">Address Line 1</label>
+                            <input type="text" class="form-control" placeholder="enter address line 1" asp-for="AddressLine1">
+                            <span asp-validation-for="AddressLine1" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="labels" asp-for="AddressLine2">Address Line 2</label>
+                            <input type="text" class="form-control" placeholder="enter address line 2" asp-for="AddressLine2">
+                            <span asp-validation-for="AddressLine2" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="labels" asp-for="Postcode">Postcode</label>
+                            <input type="text" class="form-control" placeholder="enter postcode" asp-for="Postcode">
+                            <span asp-validation-for="Postcode" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="labels" asp-for="City">City</label>
+                            <input type="text" class="form-control" placeholder="enter city" asp-for="City">
+                            <span asp-validation-for="City" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="labels" asp-for="Area">Area</label>
+                            <input type="text" class="form-control" placeholder="enter area" asp-for="Area">
+                            <span asp-validation-for="Area" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="labels" asp-for="Country">Country</label>
+                            <input type="text" class="form-control" placeholder="country" asp-for="Country">
+                            <span asp-validation-for="Country" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="labels" asp-for="State">State/Region</label>
+                            <input type="text" class="form-control" placeholder="state" asp-for="State">
+                            <span asp-validation-for="State" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        $('#btnusrPrfSubmit').click(function () {            
+            var myData = $('#userProfileForm').serialize();
+            $.ajax({
+                type: "POST",
+                url: "/UserProfile/Edit",
+                data: myData,
+                contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                dataType: "html",
+                success: function (response) {
+                    debugger;
+                    $("#exampleModal").find(".modal-body").html(response);
+                    $("#exampleModal").modal('show');
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        });
+    });
+</script>
+

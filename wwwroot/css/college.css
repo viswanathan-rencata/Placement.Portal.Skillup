@@ -57,3 +57,7 @@ button.accept-policy {
 .pr50 {
     padding-right:50px;
 }
+
+.nav > li > a:hover, .nav > li > a:focus {    
+    background-color: #343a40 !important;
+}
