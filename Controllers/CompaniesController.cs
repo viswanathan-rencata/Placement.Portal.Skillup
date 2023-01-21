@@ -68,7 +68,15 @@ namespace Placement.Portal.Skillup.Controllers
                 if (userFromDb is not null)
                 {
                     ModelState.AddModelError("UserNameMatchError", "UserName is already exists..!");
-                    return View(GetCompanyRegisterViewModel());
+                    return View(GetCompanyRegisterViewModel(true));
+                }
+
+                var allUsers = await _unitOfWork.UserRepository.GetAllUser();
+
+                if (allUsers.Any(x => x.CompanyId == Convert.ToInt16(model.CompanyId)))
+                {
+                    ModelState.AddModelError("CompanySelectionError", "Selected company is already registered. Please contact administrator.");
+                    return View(GetCompanyRegisterViewModel(true));
                 }
 
                 using var hmac = new HMACSHA512();
@@ -90,12 +98,12 @@ namespace Placement.Portal.Skillup.Controllers
                 if (!await _unitOfWork.Complete()) return RedirectToAction("Login");
                 else
                 {
-                    return View(GetCompanyRegisterViewModel());
+                    return View(GetCompanyRegisterViewModel(true));
                 }                
             }
             else
             {
-                return View(GetCompanyRegisterViewModel());
+                return View(GetCompanyRegisterViewModel(true));
             }
         }
 
@@ -181,11 +189,12 @@ namespace Placement.Portal.Skillup.Controllers
             return dropdownList;
         }
 
-        private CompanyRegisterViewModel GetCompanyRegisterViewModel()
+        private CompanyRegisterViewModel GetCompanyRegisterViewModel(bool isRegistrationFailed = false)
         {
             var companyRegisteVM = new CompanyRegisterViewModel();
             var cmpList = _unitOfWork.CompanyMasterRepository.GetAll();
             companyRegisteVM.Company = GetDropDownItems(cmpList);
+            companyRegisteVM.IsRegistrationFailed = isRegistrationFailed;
             return companyRegisteVM;
         }
 

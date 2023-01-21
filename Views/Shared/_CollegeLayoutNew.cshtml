@@ -1,0 +1,223 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>    
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <link rel="stylesheet" href="~/css/college.css" asp-append-version="true" />
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <style>
+        header, footer {
+            background: -webkit-linear-gradient(90deg, #16222A 10%, #3A6073 90%);
+            background: -moz-linear-gradient(90deg, #16222A 10%, #3A6073 90%);
+            background: -o-linear-gradient(90deg, #16222A 10%, #3A6073 90%);
+            background: linear-gradient(90deg, #16222A 10%, #3A6073 90%);
+            font-family: 'Raleway', sans-serif;
+        }
+
+        .container {           
+            margin-right: auto !important;
+            margin-left: auto !important;
+        }
+
+        body {
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+            font-family: 'Overpass', sans-serif;
+            letter-spacing: 0px;
+            font-size: 17px;
+            color: #8d8f90;           
+            font-weight: 400;
+            line-height: 32px;
+            background-color: #edefef !important;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            color: #25292a;
+            margin: 0px 0px 10px 0px;
+            font-family: 'Overpass', sans-serif;
+            font-weight: 700;
+            letter-spacing: -1px;
+            line-height: 1;
+        }
+
+        h1 {
+            font-size: 34px;
+        }
+
+        h2 {
+            font-size: 28px;
+            line-height: 38px;
+        }
+
+        h3 {
+            font-size: 22px;
+            line-height: 32px;
+        }
+
+        h4 {
+            font-size: 20px;
+        }
+
+        h5 {
+            font-size: 17px;
+        }
+
+        h6 {
+            font-size: 12px;
+        }
+
+        p {
+            margin: 0 0 20px;
+            line-height: 1.7;
+        }
+
+            p:last-child {
+                margin: 0px;
+            }
+
+        ul, ol {
+        }
+
+        a {
+            text-decoration: none;
+            color: #8d8f90;
+            -webkit-transition: all 0.3s;
+            -moz-transition: all 0.3s;
+            transition: all 0.3s;
+        }
+
+            a:focus, a:hover {
+                text-decoration: none;
+                color: #f85759;
+            }
+
+
+
+        .page-header {
+            /*  background: url(https://easetemplate.com/free-website-templates/hike/images/pageheader.jpg)no-repeat;*/
+            /*background-image: url('file/teachers-college-exterior.jpg');*/
+            background-image: url('file/pic1-01-scaled.jpeg');
+            position: relative;
+            background-size: cover;
+            padding-bottom: 52px !important;
+            margin: 0px 0 0px !important;
+            border-bottom: 1px solid #eee !important;
+        }
+
+        .page-caption {
+            padding-top: 170px;
+            padding-bottom: 174px;
+        }
+
+        .page-title {
+            font-size: 46px;
+            line-height: 1;
+            color: #fff;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .card-section {
+            position: relative;
+            bottom: 60px;
+        }
+
+        .card-block {
+            padding: 80px;
+        }
+
+        .section-title {
+            margin-bottom: 60px;
+        }
+
+        .nav-link{
+            color:white !important;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- page-header -->
+    <div class="">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary bg-dark" data-bs-theme="dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#"></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">Dashboard</a>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right pr50">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Welcome, @ViewBag.UserName
+
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">User Profile</a></li>
+                                <li><a class="dropdown-item" href="#">Another action</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <form asp-action="Logout" method="post">
+                                        <button type="submit" class="btn btn-outline-success btn-logout">Logout</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="container page-header">
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="page-caption">
+                        <h1 class="page-title">@ViewBag.CollegeName</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.page-header-->
+    <!-- news -->
+    <div class="card-section">
+        <div class="container">
+            <div class="card-block bg-white mb30">
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <!-- section-title -->
+                        <div class="section-title mb-0">                           
+                        </div>
+                        <!-- /.section-title -->
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-center">
+                    @RenderBody()
+                    @*Created for <a href="https://easetemplate.com/downloads/digital-marketing-website-template-hike-bold-design/" target="_blank">easetemplate</a>*@
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2023 - Placement Portal (Skillup) - <a asp-area="" asp-controller="" asp-action="">Privacy</a>
+        </div>
+    </footer>
+</body>
+</html>

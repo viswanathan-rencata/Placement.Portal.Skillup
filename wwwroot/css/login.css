@@ -14,6 +14,12 @@
     background-position: center;
 }
 
+.bg-com1-image {    
+    background-image: url('../img/registration.png');
+    background-size: cover;
+    background-position: center;
+}
+
 .login-heading {
     font-weight: 300;
 }
