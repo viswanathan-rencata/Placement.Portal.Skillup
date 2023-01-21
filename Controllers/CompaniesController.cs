@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 
 namespace Placement.Portal.Skillup.Controllers
 {
@@ -39,6 +40,17 @@ namespace Placement.Portal.Skillup.Controllers
         public IActionResult Register()
         {
             return View(GetCompanyRegisterViewModel());
+        }
+
+        public IActionResult ViewRequests()
+        {
+            return View("Index");
+
+            //AppDBContext dBContext = new AppDBContext();
+
+            //var data = dBContext.CompanyRequest;
+            
+            //return View (data.ToList());
         }
 
         [HttpPost]
@@ -151,7 +163,7 @@ namespace Placement.Portal.Skillup.Controllers
                     new ClaimsPrincipal(claimsIdentity),
                     authProperties);
 
-                return RedirectToAction("Index");
+                return View("CompanyRequest");
             }
             else
             {
@@ -184,6 +196,60 @@ namespace Placement.Portal.Skillup.Controllers
             companyRegisteVM.Company = GetDropDownItems(cmpList);
             companyRegisteVM.IsRegistrationFailed = isRegistrationFailed;
             return companyRegisteVM;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CompanyRequest(CompanyRequestViewModel model)
+        {
+            if (model.CollegeName == "0")
+            {
+                ModelState.AddModelError("Company", "Please select any College Name");
+            }
+
+            if (ModelState.IsValid)
+            {
+                
+                var companyReq = new CompanyRequest
+                {
+                    CollegeName = "Southwest Wisconsin Technical College",
+                    RequestDate = model.RequestDate,
+                    Department = "Electronics",
+                    CoreAreas = model.CoreAreas,
+                    Percentage = model.CGPAPercent,
+                    Comments = model.Comments
+                };
+
+                await _unitOfWork.CompanyRequestRepository.AddCompanyRequestAsync(companyReq);
+
+                if (await _unitOfWork.Complete()) return View(GetCompanyRequestViewModel());
+                else
+                {
+                    return View(GetCompanyRequestViewModel());
+                }
+            }
+            else
+            {
+                return View(GetCompanyRequestViewModel());
+            }
+        }
+
+        private List<SelectListItem> GetCollegeDropDownItems(List<CollegeMaster> list)
+        {
+            List<SelectListItem> dropdownList = new();
+            dropdownList.Add(new SelectListItem { Text = "Select", Value = "0", Selected = true });
+            foreach (var item in list)
+            {
+                dropdownList.Add(new SelectListItem { Text = item.Name, Value = item.ID.ToString() });
+            }
+            return dropdownList;
+        }
+
+        private CompanyRequestViewModel GetCompanyRequestViewModel()
+        {
+            var companyRequestVM = new CompanyRequestViewModel();
+            var cmpReqList = _unitOfWork.CollegeMasterRepository.GetAll();
+            companyRequestVM.College = GetCollegeDropDownItems(cmpReqList);
+            return companyRequestVM;
         }
     }
 }

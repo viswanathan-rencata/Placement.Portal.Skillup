@@ -5,6 +5,7 @@
         ICollegeMasterRepository CollegeMasterRepository { get; }
         IAppUserRepository UserRepository { get; }
         ICompanyMasterRepository CompanyMasterRepository { get; }
+        ICompanyRequestRepository CompanyRequestRepository { get; }
         Task<bool> Complete();
         bool HasChanges();
     }

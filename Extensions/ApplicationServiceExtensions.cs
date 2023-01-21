@@ -11,6 +11,7 @@ namespace Placement.Portal.Skillup.Extensions
             services.AddTransient<ICollegeMasterRepository, CollegeMasterRepository>();
             services.AddTransient<ICollegeMasterRepository, CollegeMasterRepository>();
             services.AddTransient<IAppUserRepository, AppUserRepository>();
+            services.AddTransient<ICompanyRequestRepository, CompanyRequestRepository>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
 
             return services;
