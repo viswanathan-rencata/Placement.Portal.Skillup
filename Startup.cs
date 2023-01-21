@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Placement.Portal.Skillup.Data;
 using Placement.Portal.Skillup.Extensions;
+using Placement.Portal.Skillup.Helpers;
 using Placement.Portal.Skillup.Interface;
 using Placement.Portal.Skillup.Interface.Data;
 using Placement.Portal.Skillup.Models;
@@ -28,6 +29,7 @@ namespace Placement.Portal.Skillup
 
             services.AddMemoryCache();
             services.AddApplicationServices();
+            services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
 
             services.AddControllersWithViews().AddRazorRuntimeCompilation();            
 

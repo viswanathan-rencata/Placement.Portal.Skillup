@@ -7,5 +7,6 @@ namespace Placement.Portal.Skillup.Interface.Data
         Task AddUserAsync(AppUser user);
         Task<AppUser> GetUserbyId(string userName);
         Task<List<AppUser>> GetAllUser();
+        void UpdateUser(AppUser user);
     }
 }
