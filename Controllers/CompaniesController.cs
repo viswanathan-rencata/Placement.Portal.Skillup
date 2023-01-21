@@ -32,7 +32,8 @@ namespace Placement.Portal.Skillup.Controllers
         
         public IActionResult Login()
         {
-            return View();
+            LoginViewModel model = new();
+            return View(model);
         }
 
         public IActionResult Register()
@@ -55,7 +56,15 @@ namespace Placement.Portal.Skillup.Controllers
                 if (userFromDb is not null)
                 {
                     ModelState.AddModelError("UserNameMatchError", "UserName is already exists..!");
-                    return View(GetCompanyRegisterViewModel());
+                    return View(GetCompanyRegisterViewModel(true));
+                }
+
+                var allUsers = await _unitOfWork.UserRepository.GetAllUser();
+
+                if (allUsers.Any(x => x.CompanyId == Convert.ToInt16(model.CompanyId)))
+                {
+                    ModelState.AddModelError("CompanySelectionError", "Selected company is already registered. Please contact administrator.");
+                    return View(GetCompanyRegisterViewModel(true));
                 }
 
                 using var hmac = new HMACSHA512();
@@ -77,12 +86,12 @@ namespace Placement.Portal.Skillup.Controllers
                 if (!await _unitOfWork.Complete()) return RedirectToAction("Login");
                 else
                 {
-                    return View(GetCompanyRegisterViewModel());
+                    return View(GetCompanyRegisterViewModel(true));
                 }                
             }
             else
             {
-                return View(GetCompanyRegisterViewModel());
+                return View(GetCompanyRegisterViewModel(true));
             }
         }
 
@@ -96,19 +105,22 @@ namespace Placement.Portal.Skillup.Controllers
                 if (user == null)
                 {
                     ModelState.AddModelError("PasswordMatchError", "UserName/Password is incorrect");
-                    return View();
+                    model.IsLoginSucceed = false;
+                    return View(model);
                 }
                 else
                 {
                     if (!user.Status)
                     {
                         ModelState.AddModelError("UserInactiveError", $"{model.UserName} is inactive.Please contact administrator. ");
-                        return View();
+                        model.IsLoginSucceed = false;
+                        return View(model);
                     }
                     else if (user.CompanyOrCollege == (int)CompanyOrCollege.College)
                     {
                         ModelState.AddModelError("UserInactiveError", $"{model.UserName} is invalid");
-                        return View();
+                        model.IsLoginSucceed = false;
+                        return View(model);
                     }
                 }
 
@@ -118,7 +130,8 @@ namespace Placement.Portal.Skillup.Controllers
                 if (!computedHash.SequenceEqual(user.PasswordHash))
                 {
                     ModelState.AddModelError("PasswordMatchError", "UserName/Password is incorrect");
-                    return View();
+                    model.IsLoginSucceed = false;
+                    return View(model);
                 }
 
                 var claims = new List<Claim>
@@ -142,7 +155,8 @@ namespace Placement.Portal.Skillup.Controllers
             }
             else
             {
-                return View();
+                model.IsLoginSucceed = false;
+                return View(model);
             }
         }
 
@@ -163,11 +177,12 @@ namespace Placement.Portal.Skillup.Controllers
             return dropdownList;
         }
 
-        private CompanyRegisterViewModel GetCompanyRegisterViewModel()
+        private CompanyRegisterViewModel GetCompanyRegisterViewModel(bool isRegistrationFailed = false)
         {
             var companyRegisteVM = new CompanyRegisterViewModel();
             var cmpList = _unitOfWork.CompanyMasterRepository.GetAll();
             companyRegisteVM.Company = GetDropDownItems(cmpList);
+            companyRegisteVM.IsRegistrationFailed = isRegistrationFailed;
             return companyRegisteVM;
         }
     }

@@ -28,5 +28,10 @@ namespace Placement.Portal.Skillup.Data
             _memoryCache.Set("AppUser", dataMap);
             return dataMap;
         }
+
+        public async Task<List<AppUser>> GetAllUser()
+        {
+            return await _dbContext.AppUser.ToListAsync();
+        }
     }
 }

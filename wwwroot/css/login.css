@@ -1,8 +1,35 @@
-﻿.container {
-    display: block;
-    flex-direction: column;
+﻿.login {
+    min-height: 100vh;
 }
 
-body {
-    background-color: antiquewhite;
+.bg-image {
+    background-image: url('../img/college-login-bg.png');
+    background-size: cover;
+    background-position: center;
+}
+
+.bg-com-image {
+    background-image: url('../img/company-login-bg.png');
+    background-size: cover;
+    background-position: center;
+}
+
+.bg-com1-image {    
+    background-image: url('../img/registration.png');
+    background-size: cover;
+    background-position: center;
+}
+
+.login-heading {
+    font-weight: 300;
+}
+
+.btn-login {
+    font-size: 0.9rem;
+    letter-spacing: 0.05rem;
+    padding: 0.75rem 1rem;
+}
+
+a {
+    text-decoration: none;
 }
