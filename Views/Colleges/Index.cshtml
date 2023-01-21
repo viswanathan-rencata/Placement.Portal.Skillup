@@ -2,5 +2,618 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
-    Layout = "_CollegeLayout";
+    Layout = "_CollegeLayoutNew";
 }
+
+@model Placement.Portal.Skillup.Models.CollegeDetails
+
+@*<link href="~/collegedashboard/bootstrap.min.css" rel="stylesheet" />
+<script src="~/collegedashboard/bootstrap.min.js"></script>
+<script src="~/collegedashboard/jquery-1.11.1.min.js"></script>*@
+
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
+<script src="http://getbootstrap.com/dist/js/bootstrap.min.js"></script>
+
+
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+
+<script src="https://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.js"></script>
+
+<style>
+    /*.container {
+
+                                                                            background: -webkit-linear-gradient(90deg, #16222A 10%, #3A6073 90%);
+                                                                            background: -moz-linear-gradient(90deg, #16222A 10%, #3A6073 90%);
+                                                                            background: -o-linear-gradient(90deg, #16222A 10%, #3A6073 90%);
+                                                                            background: linear-gradient(90deg, #16222A 10%, #3A6073 90%);
+                                                                            font-family: 'Raleway', sans-serif;
+                                                                            }*/
+
+
+
+    .filterable {
+        margin-top: 15px;
+    }
+
+        .filterable .panel-heading .pull-right {
+            margin-top: -20px;
+        }
+
+        .filterable .filters input[disabled] {
+            background-color: transparent;
+            border: none;
+            cursor: auto;
+            box-shadow: none;
+            padding: 0;
+            height: auto;
+        }
+
+            .filterable .filters input[disabled]::-webkit-input-placeholder {
+                color: #333;
+            }
+
+            .filterable .filters input[disabled]::-moz-placeholder {
+                color: #333;
+            }
+
+            .filterable .filters input[disabled]:-ms-input-placeholder {
+                color: #333;
+            }
+
+    /*body {
+                                background-color: #6D5959;
+                            }
+
+                                body * {
+                                    font-family: 'Montserrat' sans-serif;
+                                }*/
+
+
+
+    .mat-label {
+        display: block;
+        font-size: 16px;
+        transform: translateY(25px);
+        color: #e2e2e2;
+        transition: all 0.5s;
+    }
+
+    .mat-input {
+        position: relative;
+        background: transparent;
+        width: 100%;
+        border: none;
+        outline: none;
+        padding: 8px 0;
+        font-size: 16px;
+    }
+
+    .mat-div {
+        padding: 30px 0 0 0;
+        position: relative;
+    }
+
+        .mat-div:after, .mat-div:before {
+            content: "";
+            position: absolute;
+            display: block;
+            width: 100%;
+            height: 2px;
+            background-color: #e2e2e2;
+            bottom: 0;
+            left: 0;
+            transition: all 0.5s;
+        }
+
+        .mat-div::after {
+            background-color: #8E8DBE;
+            transform: scaleX(0);
+        }
+
+    .is-active::after {
+        transform: scaleX(1);
+    }
+
+    .is-active .mat-label {
+        color: #8E8DBE;
+    }
+
+    .is-completed .mat-label {
+        font-size: 12px;
+        transform: translateY(0);
+    }
+
+    button {
+        background-color: #93E1D8;
+        border: none;
+        display: block;
+        margin: 35px auto;
+        padding: 15px 30px;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+    /* Animation*/
+    h2 {
+        text-align: center;
+        padding: 20px;
+    }
+    /* Slider */
+
+    .slick-slide {
+        margin: 0px 20px;
+    }
+
+        .slick-slide img {
+            width: 100%;
+
+        }
+
+    .slick-slider {
+        position: relative;
+        display: block;
+        box-sizing: border-box;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        -webkit-touch-callout: none;
+        -khtml-user-select: none;
+        -ms-touch-action: pan-y;
+        touch-action: pan-y;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .slick-list {
+        position: relative;
+        display: block;
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
+    }
+
+        .slick-list:focus {
+            outline: none;
+        }
+
+        .slick-list.dragging {
+            cursor: pointer;
+            cursor: hand;
+        }
+
+    .slick-slider .slick-track,
+    .slick-slider .slick-list {
+        -webkit-transform: translate3d(0, 0, 0);
+        -moz-transform: translate3d(0, 0, 0);
+        -ms-transform: translate3d(0, 0, 0);
+        -o-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+
+    .slick-track {
+        position: relative;
+        top: 0;
+        left: 0;
+        display: block;
+    }
+
+        .slick-track:before,
+        .slick-track:after {
+            display: table;
+            content: '';
+        }
+
+        .slick-track:after {
+            clear: both;
+        }
+
+    .slick-loading .slick-track {
+        visibility: hidden;
+    }
+
+    .slick-slide {
+        display: none;
+        float: left;
+        height: 100%;
+        min-height: 1px;
+    }
+
+    [dir='rtl'] .slick-slide {
+        float: right;
+    }
+
+    .slick-slide img {
+        display: block;
+    }
+
+    .slick-slide.slick-loading img {
+        display: none;
+    }
+
+    .slick-slide.dragging img {
+        pointer-events: none;
+    }
+
+    .slick-initialized .slick-slide {
+        display: block;
+    }
+
+    .slick-loading .slick-slide {
+        visibility: hidden;
+    }
+
+    .slick-vertical .slick-slide {
+        display: block;
+        height: auto;
+        border: 1px solid transparent;
+    }
+
+    .slick-arrow.slick-hidden {
+        display: none;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        $('.customer-logos').slick({
+            slidesToShow: 6,
+            slidesToScroll: 1,
+            autoplay: true,
+            autoplaySpeed: 1500,
+            arrows: false,
+            dots: false,
+            pauseOnHover: false,
+            responsive: [{
+                breakpoint: 768,
+                settings: {
+                    slidesToShow: 4
+                }
+            }, {
+                breakpoint: 520,
+                settings: {
+                    slidesToShow: 3
+                }
+            }]
+        });
+        $("#mytable #checkall").click(function () {
+            if ($("#mytable #checkall").is(':checked')) {
+                $("#mytable input[type=checkbox]").each(function () {
+                    $(this).prop("checked", true);
+                });
+
+            } else {
+                $("#mytable input[type=checkbox]").each(function () {
+                    $(this).prop("checked", false);
+                });
+            }
+        });
+
+        $("[data-toggle=tooltip]").tooltip();
+
+        $('.filterable .btn-filter').click(function () {
+            var $panel = $(this).parents('.filterable'),
+                $filters = $panel.find('.filters input'),
+                $tbody = $panel.find('.table tbody');
+            if ($filters.prop('disabled') == true) {
+                $filters.prop('disabled', false);
+                $filters.first().focus();
+            } else {
+                $filters.val('').prop('disabled', true);
+                $tbody.find('.no-result').remove();
+                $tbody.find('tr').show();
+            }
+        });
+
+        $('.filterable .filters input').keyup(function (e) {
+            /* Ignore tab key */
+            var code = e.keyCode || e.which;
+            if (code == '9') return;
+            /* Useful DOM data and selectors */
+            var $input = $(this),
+                inputContent = $input.val().toLowerCase(),
+                $panel = $input.parents('.filterable'),
+                column = $panel.find('.filters th').index($input.parents('th')),
+                $table = $panel.find('.table'),
+                $rows = $table.find('tbody tr');
+            /* Dirtiest filter function ever ;) */
+            var $filteredRows = $rows.filter(function () {
+
+                var value = $(this).find('td').eq(column).text().toLowerCase();
+                return value.indexOf(inputContent) === -1;
+            });
+            /* Clean previous no-result if exist */
+            $table.find('tbody .no-result').remove();
+            /* Show all rows, hide filtered ones (never do that outside of a demo ! xD) */
+            $rows.show();
+            $filteredRows.hide();
+            /* Prepend no-result row if all rows are filtered */
+            if ($filteredRows.length === $rows.length) {
+                $table.find('tbody').prepend($('<tr class="no-result text-center"><td colspan="' + $table.find('.filters th').length + '">No result found</td></tr>'));
+            }
+        });
+
+        $("#myDialog").dialog({
+            autoOpen: false,
+            modal: true,
+            height: 700,
+            width: 600,
+            scroll: true,
+            title: "Add New Student",
+            show: {
+                effect: "Fade",
+                duration: 1000
+            },
+            hide: {
+                effect: "Fade",
+                duration: 1000
+            },
+            buttons: {
+                'Submit': function () {
+                    var textValue = $('#myTextBox').val();
+                    alert('The value of the text box is ' + textValue);
+                    //Now you have the value of the textbox, you can do something with it, maybe an AJAX call to your server!
+                }
+                //,
+                //'Close': function () {
+                //    alert('The Close button was clicked');
+                //    $(this).dialog('close');
+                //}
+            }
+        });
+
+        //Open the dialog box when the button is clicked.
+        $('#clickMe').click(function () {
+            $("#myDialog").dialog("open");
+        });
+
+        $(".mat-input").focus(function () {
+            $(this).parent().addClass("is-active is-completed");
+        });
+
+        $(".mat-input").focusout(function () {
+            if ($(this).val() === "")
+                $(this).parent().removeClass("is-completed");
+            $(this).parent().removeClass("is-active");
+        });
+
+        //$("#btnOffer").click(function (e) {
+        //    e.preventDefault();
+        //    window.location.href = "File/functionalsample.pdf";
+        //});
+        $('.btnOffer').click(function (e) {
+            e.preventDefault();  //stop the browser from following
+            //window.location.href = 'File/functionalsample.pdf';
+            window.open("File/functionalsample.pdf", "_blank");
+        });
+
+    });
+</script>
+<div class="container-fluid">
+    <div class="row">
+        <div class="container">
+            
+            <h2>College Partners</h2>
+             <hr />
+            <section class="customer-logos slider">
+                <div class="slide" style="border-radius:10px"><img src="https://image.freepik.com/free-vector/luxury-letter-e-logo-design_1017-8903.jpg"></div>
+                
+                <div class="slide"><img src="https://image.freepik.com/free-vector/3d-box-logo_1103-876.jpg"></div>
+                <div class="slide"><img src="https://image.freepik.com/free-vector/blue-tech-logo_1103-822.jpg"></div>
+                <div class="slide"><img src="https://image.freepik.com/free-vector/colors-curl-logo-template_23-2147536125.jpg"></div>
+                <div class="slide"><img src="https://image.freepik.com/free-vector/abstract-cross-logo_23-2147536124.jpg"></div>
+                <div class="slide"><img src="https://image.freepik.com/free-vector/football-logo-background_1195-244.jpg"></div>
+                <div class="slide"><img src="https://image.freepik.com/free-vector/background-of-spots-halftone_1035-3847.jpg"></div>                 
+                <div class="slide" style="border-radius:10px"><img src="https://image.freepik.com/free-vector/luxury-letter-e-logo-design_1017-8903.jpg"></div>
+                
+                <div class="slide"><img src="https://image.freepik.com/free-vector/3d-box-logo_1103-876.jpg"></div>
+                <div class="slide"><img src="https://image.freepik.com/free-vector/blue-tech-logo_1103-822.jpg"></div>
+                <div class="slide"><img src="https://image.freepik.com/free-vector/colors-curl-logo-template_23-2147536125.jpg"></div>
+                <div class="slide"><img src="https://image.freepik.com/free-vector/abstract-cross-logo_23-2147536124.jpg"></div>
+                <div class="slide"><img src="https://image.freepik.com/free-vector/football-logo-background_1195-244.jpg"></div>
+                <div class="slide"><img src="https://image.freepik.com/free-vector/background-of-spots-halftone_1035-3847.jpg"></div>
+                 
+            </section>
+        </div>
+    </div>
+   @* <hr />
+    <div class="row">
+        <div class="container">
+            <hr />
+            <h2>Shortlisted Students</h2>
+            <hr />
+            <section class="customer-logos slider">                
+                 
+                <div class="slide" style="border-radius:10px"><img src="https://image.freepik.com/free-vector/luxury-letter-e-logo-design_1017-8903.jpg"></div>
+                <div class="slide"><img src="https://image.freepik.com/free-vector/3d-box-logo_1103-876.jpg"></div>
+                <div class="slide"><img src="https://image.freepik.com/free-vector/blue-tech-logo_1103-822.jpg"></div>
+                <div class="slide"><img src="https://image.freepik.com/free-vector/colors-curl-logo-template_23-2147536125.jpg"></div>
+                <div class="slide"><img src="https://image.freepik.com/free-vector/abstract-cross-logo_23-2147536124.jpg"></div>
+                <div class="slide"><img src="https://image.freepik.com/free-vector/football-logo-background_1195-244.jpg"></div>
+                <div class="slide"><img src="https://image.freepik.com/free-vector/background-of-spots-halftone_1035-3847.jpg"></div>
+                <div class="slide"><img src="https://image.freepik.com/free-vector/3d-box-logo_1103-876.jpg"></div>
+                <div class="slide"><img src="https://image.freepik.com/free-vector/blue-tech-logo_1103-822.jpg"></div>
+                <div class="slide"><img src="https://image.freepik.com/free-vector/colors-curl-logo-template_23-2147536125.jpg"></div>
+                <div class="slide"><img src="https://image.freepik.com/free-vector/abstract-cross-logo_23-2147536124.jpg"></div>
+                <div class="slide"><img src="https://image.freepik.com/free-vector/football-logo-background_1195-244.jpg"></div>
+                <div class="slide"><img src="https://image.freepik.com/free-vector/background-of-spots-halftone_1035-3847.jpg"></div>
+
+            </section>
+        </div>
+    </div>
+    <hr />*@
+    
+    <h2>Students Details</h2>
+    <hr />
+    <div class="row">
+         <div class="table-responsive filterable" style="height:530px!important;">
+        <div class="panel-heading">
+            <button class="btn btn-primary" id="clickMe">Add Student</button>
+            <div class="pull-right">
+                <button class="btn btn-default btn-xs btn-filter"><span class="glyphicon glyphicon-filter"></span> Filter</button>
+            </div>
+        </div>
+
+        <table id="mytable" class="table table-bordred table-striped">
+
+            @* <a href="#" class="btn btn-primary btn-xs pull-right"><b>+</b> Add Student</a>*@
+            <thead>
+                <tr class="filters">
+                    <th><input type="text" class="form-control" placeholder="Id" disabled></th>
+                    <th><input type="text" class="form-control" placeholder="Name" disabled></th>
+                    <th><input type="text" class="form-control" placeholder="Gender" disabled></th>
+                    <th style="display:none"><input type="text" class="form-control" placeholder="Email" disabled></th>
+                    <th style="display:none"><input type="text" class="form-control" placeholder="DOB" disabled></th>
+                    <th style="display:none"><input type="text" class="form-control" placeholder="DOJ" disabled></th>
+                    <th><input type="text" class="form-control" placeholder="Class" disabled></th>
+                    <th><input type="text" class="form-control" placeholder="Department" disabled></th>
+                    <th><input type="text" class="form-control" placeholder="Phone Number" disabled></th>
+                    <th><input type="text" class="form-control" placeholder="Address" disabled></th>
+                    <th><input type="text" class="form-control" placeholder="Action" disabled readonly></th>
+                </tr>
+
+                @*<th>Delete</th>*@
+            </thead>
+            <tbody>
+                @foreach (var item in Model.students)
+                {
+                    <tr>
+                        <td style="width:60px">
+                            @item.Id
+                        </td>
+                        <td style="width:80px">
+                            @item.FirstName @item.MiddleName @item.LastName
+                        </td>
+                        <td style="width:70px">
+                            @item.Gender
+                        </td>
+                        <td style="display:none;width:1px">
+                            @item.Email
+                        </td>
+                        <td style="display:none;width:1px">
+                            @item.DOJ.ToString("MM/dd/yyyy")
+                        </td>
+                        <td style="display:none;width:1px">
+                            @item.DOB.ToString("MM/dd/yyyy")
+                        </td>
+                        <td style="width:70px">
+                            @item.ClassName
+                        </td>
+                        <td style="width:70px">
+                            @item.Dept
+                        </td>
+                        <td style="width:70px">
+                            @item.PhoneNumber
+                        </td>
+                        <td style="width:100px">
+                            @item.Address
+                        </td>
+                        <td style="width:40px">
+
+                            <a class="btnOffer" href="no-script.html">
+                                <span class="glyphicon glyphicon-download-alt">
+                                </span>
+                            </a>
+
+
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+    </div>
+   
+
+
+    <div id="myDialog">
+        <div class="modal-body">
+            @*<div class="form-group">
+            <input class="form-control " type="text" placeholder="Mohsin">
+            </div>
+            <div class="form-group">
+            <input class="form-control " type="text" placeholder="Irshad">
+            </div>
+            <div class="form-group">
+            <textarea rows="2" id="studAddress" class="form-control" placeholder="CB 106/107 Street # 11 Wah Cantt Islamabad Pakistan"></textarea>
+            </div>*@
+            <div class="mat-div">
+                <label for="first-name" class="mat-label">First Name</label>
+                <input type="text" class="mat-input" id="first-name">
+            </div>
+
+            <div class="mat-div">
+                <label for="first-name" class="mat-label">Middle Name</label>
+                <input type="text" class="mat-input" id="middle-name">
+            </div>
+
+            <div class="mat-div">
+                <label for="first-name" class="mat-label">Last Name</label>
+                <input type="text" class="mat-input" id="last-name">
+            </div>
+
+            <div class="mat-div">
+                <select class="mat-input" id="stud-gender">
+                    <option>Male</option>
+                    <option>Female</option>
+                </select>
+            </div>
+            <div class="mat-div">
+                <label for="first-name" class="mat-label">Email</label>
+                <input type="email" class="mat-input" id="email-id">
+            </div>
+
+            <div class="mat-div">
+                <label for="address" class="mat-label">Address</label>
+                <input type="text" class="mat-input" id="stud-address">
+            </div>
+            <div class="mat-div">
+                <label for="address" class="mat-label">Date of birth</label>
+                <input type="date" class="mat-input" id="stud-dataofbirth">
+            </div>
+            <div class="mat-div">
+                <label for="address" class="mat-label">Date of join</label>
+                <input type="date" class="mat-input" id="stud-dateofjoin">
+            </div>
+            <div class="mat-div">
+                <select class="mat-input" id="stud-dept">
+                    <option>Information Technology</option>
+                    <option>Science</option>
+                    <option>Nural Network</option>
+                    <option>Mining</option>
+                </select>
+            </div>
+            <div class="mat-div">
+                <select class="mat-input" id="stud-dept">
+                    <option>MCA</option>
+                    <option>MSC</option>
+                    <option>Data Mining</option>
+                    <option>CCNA Network Programming</option>
+                </select>
+            </div>
+            <div class="mat-div">
+                <label for="address" class="mat-label">Phone Number</label>
+                <input type="number" class="mat-input" id="stud-phonenumber">
+            </div>
+            <div class="mat-div">
+                <label for="address" class="mat-label">Percentage</label>
+                <input type="number" class="mat-input" id="stud-percentage">
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+
+
+
+
+
