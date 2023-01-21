@@ -3,16 +3,16 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>@ViewBag.Title</title>
+    <title>@ViewBag.Title</title>    
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-
+    <script src="~/js/college.js" asp-append-version="true"></script>
     <link rel="stylesheet" href="~/css/college.css" asp-append-version="true" />
 
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    @*<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>*@
 
     <style>
         footer {
@@ -23,7 +23,9 @@
             font-family: 'Raleway', sans-serif;
         }
 
-        .container {
+        .container {           
+            margin-right: auto !important;
+            margin-left: auto !important;
         }
 
         body {
@@ -32,10 +34,10 @@
             font-family: 'Overpass', sans-serif;
             letter-spacing: 0px;
             font-size: 17px;
-            color: #8d8f90;
+            color: #8d8f90;           
             font-weight: 400;
             line-height: 32px;
-            background-color: #edefef;
+            background-color: #edefef !important;
         }
 
         h1, h2, h3, h4, h5, h6 {
@@ -140,13 +142,18 @@
         .section-title {
             margin-bottom: 60px;
         }
+
+        .nav-link{
+            color:white !important;
+        }
+
     </style>
 </head>
 <body>
 
     <!-- page-header -->
-    <div class="page-header">
-        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary bg-dark" data-bs-theme="dark">
             <div class="container-fluid">
                 <a class="navbar-brand" href="#"></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -164,8 +171,11 @@
                                 Welcome, @ViewBag.UserName
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">User Profile</a></li>
-                                <li><a class="dropdown-item" href="#">Another action</a></li>
+                                <li>
+                                    <button type="button" id="profile" class="btn btn-outline-dark btn-profile" onc>
+                                        User Profile
+                                    </button>
+                                </li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
                                     <form asp-action="Logout" method="post">
@@ -178,7 +188,7 @@
                 </div>
             </div>
         </nav>
-        <div class="container">
+        <div class="container page-header">
             <div class="row">
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                     <div class="page-caption">

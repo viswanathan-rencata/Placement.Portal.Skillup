@@ -37,6 +37,30 @@ namespace Placement.Portal.Skillup.Models
         [Column("Status")]
         public bool Status { get; set; }
 
+        [Column("Education")]
+        public string Education { get; set; }
+        
+        [Column("AddressLine1")]
+        public string AddressLine1 { get; set; }
+
+        [Column("AddressLine2")]
+        public string AddressLine2 { get; set; }
+
+        [Column("Postcode")]
+        public string Postcode { get; set; }
+
+        [Column("Area")]
+        public string Area { get; set; }
+
+        [Column("Country")]
+        public string Country { get; set; }
+
+        [Column("State")]
+        public string State { get; set; }
+
+        [Column("City")]
+        public string City { get; set; }
+
         [Column("Created")]
         public DateTime Created { get; set; } = DateTime.Now;
 
