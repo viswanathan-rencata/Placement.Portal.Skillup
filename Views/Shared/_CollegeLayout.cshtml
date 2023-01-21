@@ -9,19 +9,32 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
     <link rel="stylesheet" href="~/css/college.css" asp-append-version="true" />
+
+    <style>
+        header, footer {
+            background: -webkit-linear-gradient(90deg, #16222A 10%, #3A6073 90%);
+            background: -moz-linear-gradient(90deg, #16222A 10%, #3A6073 90%);
+            background: -o-linear-gradient(90deg, #16222A 10%, #3A6073 90%);
+            background: linear-gradient(90deg, #16222A 10%, #3A6073 90%);
+            font-family: 'Raleway', sans-serif;
+        }
+
+        .container {
+        }
+    </style>
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">Navbar</a>
+                <a class="navbar-brand" href="#"></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Home</a>
+                            <a class="nav-link active" aria-current="page" href="#">Dashboard</a>
                         </li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right pr50">
@@ -44,13 +57,15 @@
                 </div>
             </div>
         </nav>
-
     </header>
 
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
+
+
         </main>
+        
     </div>
 
     <footer class="border-top footer text-muted">

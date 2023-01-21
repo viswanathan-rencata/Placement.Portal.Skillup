@@ -15,7 +15,7 @@ namespace Placement.Portal.Skillup.Data
             _memoryCache = memoryCache;
         }
 
-        public IAppUserRepository UserRepository => new AppUserRepository(_context);
+        public IAppUserRepository UserRepository => new AppUserRepository(_context, _memoryCache);
         public ICollegeMasterRepository CollegeMasterRepository => new CollegeMasterRepository(_context, _memoryCache);
         public ICompanyMasterRepository CompanyMasterRepository => new CompanyMasterRepository(_context, _memoryCache);
 

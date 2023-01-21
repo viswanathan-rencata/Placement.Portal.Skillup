@@ -9,6 +9,7 @@ namespace Placement.Portal.Skillup.Data
     {
         private readonly AppDBContext _dbContext;
         private readonly IMemoryCache _memoryCache;
+
         public CollegeMasterRepository(AppDBContext dbContext,
             IMemoryCache memoryCache)
         {
@@ -25,9 +26,28 @@ namespace Placement.Portal.Skillup.Data
             if (list is null)
             {
                 list = _dbContext.CollegeMaster.ToList();
-                
+
                 _memoryCache.Set("CollegeMaster", list);
             }
+            return list;
+        }
+        public Students GetStudent(int studId)
+        {
+            throw new NotImplementedException();
+        }
+        public List<Students> GetStudents()
+        {
+            List<Students> list = new();
+            AppUser user = new();
+            user = _memoryCache.Get<AppUser>("AppUser");
+            list = _memoryCache.Get<List<Students>>("Students");
+
+            if (_dbContext.Students.FirstOrDefault() != null)
+            {
+                list = _dbContext.Students.Where(x => x.CollegeId == user.CollegeId).ToList();
+                _memoryCache.Set("Students", list);
+            }
+
             return list;
         }
     }

@@ -5,5 +5,7 @@ namespace Placement.Portal.Skillup.Interface
     public interface ICollegeMasterRepository
     {
         List<CollegeMaster> GetAll();
+        public List<Students> GetStudents();
+        public Students GetStudent(int studId);
     }
 }

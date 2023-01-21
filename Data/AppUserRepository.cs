@@ -8,10 +8,12 @@ namespace Placement.Portal.Skillup.Data
 {
     public class AppUserRepository : IAppUserRepository
     {
-        private readonly AppDBContext _dbContext;        
-        public AppUserRepository(AppDBContext dbContext)
+        private readonly AppDBContext _dbContext;
+        private readonly IMemoryCache _memoryCache;
+        public AppUserRepository(AppDBContext dbContext, IMemoryCache memoryCache)
         {
-            _dbContext = dbContext;            
+            _dbContext = dbContext;
+            _memoryCache = memoryCache;
         }
 
         public async Task AddUserAsync(AppUser user)
@@ -21,7 +23,10 @@ namespace Placement.Portal.Skillup.Data
 
         public async Task<AppUser> GetUserbyId(string userName)
         {
-            return await _dbContext.AppUser.SingleOrDefaultAsync(x => x.UserName == userName.ToLower());
+            var dataMap = await _dbContext.AppUser.SingleOrDefaultAsync(x => x.UserName == userName.ToLower());
+            _memoryCache.Remove("AppUser");
+            _memoryCache.Set("AppUser", dataMap);
+            return dataMap;
         }
 
         public async Task<List<AppUser>> GetAllUser()
