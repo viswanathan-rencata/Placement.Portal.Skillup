@@ -34,12 +34,7 @@ namespace Placement.Portal.Skillup.Controllers
 
             CollegeDetails _collegeDetails = new CollegeDetails();
             _collegeDetails.collegeMaster = new CollegeMaster();
-            List<Students> dataMapping = _studRepo.GetStudents();
-            if (dataMapping.FirstOrDefault()  != null)
-            {               
-                _collegeDetails.students = dataMapping.ToList();
-            }
-
+            _collegeDetails.students = _studRepo.GetStudents().ToList();
             //ViewBag.CollegeName = "";
 
             return View(_collegeDetails);     
