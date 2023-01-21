@@ -31,6 +31,19 @@ namespace Placement.Portal.Skillup.Data
             }
             return list;
         }
+        public CollegeMaster GetCollegeById()
+        {
+            AppUser user = new();
+            CollegeMaster dataCollege = new();
+            user = _memoryCache.Get<AppUser>("AppUser");
+            List<CollegeMaster> list = new();
+            list = _dbContext.CollegeMaster.ToList();
+            if (list.Count > 0)
+            {
+                dataCollege = list.Where(x => x.ID == user.CollegeId).FirstOrDefault();
+            }
+            return dataCollege;
+        }
         public Students GetStudent(int studId)
         {
             throw new NotImplementedException();
@@ -40,15 +53,22 @@ namespace Placement.Portal.Skillup.Data
             List<Students> list = new();
             AppUser user = new();
             user = _memoryCache.Get<AppUser>("AppUser");
-            list = _memoryCache.Get<List<Students>>("Students");
 
             if (_dbContext.Students.FirstOrDefault() != null)
             {
                 list = _dbContext.Students.Where(x => x.CollegeId == user.CollegeId).ToList();
-                _memoryCache.Set("Students", list);
             }
 
             return list;
+        }
+        public bool AddStudents(Students Student)
+        {
+            AppUser user = new();
+            user = _memoryCache.Get<AppUser>("AppUser");
+            Student.CollegeId = Convert.ToInt64(user.CollegeId);
+            _dbContext.Students.Add(Student);
+            _dbContext.SaveChanges();
+            return true;
         }
     }
 }

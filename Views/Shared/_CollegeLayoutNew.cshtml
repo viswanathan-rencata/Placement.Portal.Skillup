@@ -15,7 +15,7 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
     <style>
-        header, footer {
+        footer {
             background: -webkit-linear-gradient(90deg, #16222A 10%, #3A6073 90%);
             background: -moz-linear-gradient(90deg, #16222A 10%, #3A6073 90%);
             background: -o-linear-gradient(90deg, #16222A 10%, #3A6073 90%);
@@ -112,8 +112,8 @@
         }
 
         .page-caption {
-            padding-top: 170px;
-            padding-bottom: 174px;
+            padding-top: 80px;
+            padding-bottom: 100px;
         }
 
         .page-title {
@@ -130,7 +130,11 @@
         }
 
         .card-block {
-            padding: 80px;
+            padding: 30px;
+        }
+
+        .card-blockFooter {
+            padding: 20px;
         }
 
         .section-title {
@@ -188,27 +192,22 @@
     <!-- news -->
     <div class="card-section">
         <div class="container">
-            <div class="card-block bg-white mb30">
-                <div class="row">
-                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                        <!-- section-title -->
-                        <div class="section-title mb-0">                           
-                        </div>
-                        <!-- /.section-title -->
-                    </div>
-                </div>
-            </div>
+           @* <div class="card-block bg-white mb30">
+            </div>*@
             <div class="row">
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-center">
                     @RenderBody()
-                    @*Created for <a href="https://easetemplate.com/downloads/digital-marketing-website-template-hike-bold-design/" target="_blank">easetemplate</a>*@
                 </div>
             </div>
+
         </div>
+
     </div>
-    </div>
+
     <footer class="border-top footer text-muted">
         <div class="container">
+           @* <div class="card-blockFooter bg-white mb30">
+            </div>*@
             &copy; 2023 - Placement Portal (Skillup) - <a asp-area="" asp-controller="" asp-action="">Privacy</a>
         </div>
     </footer>
