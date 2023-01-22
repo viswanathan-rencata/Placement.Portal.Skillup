@@ -213,7 +213,7 @@ namespace Placement.Portal.Skillup.Controllers
                 var companyReq = new CompanyRequest
                 {
                     CollegeName = "Southwest Wisconsin Technical College",
-                    RequestDate = model.RequestDate,
+                    RequestDate = model.RequestDate.ToString(),
                     Department = "Electronics",
                     CoreAreas = model.CoreAreas,
                     Percentage = model.CGPAPercent,
