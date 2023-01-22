@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Caching.Memory;
 using Placement.Portal.Skillup.Interface.Data;
 using Placement.Portal.Skillup.Models;
@@ -20,9 +21,29 @@ namespace Placement.Portal.Skillup.Data
             await _dbContext.AddAsync(companyRequest);
         }
 
-        public async Task<List<CompanyRequest>> GetCompanyRequestAsync(int companyId)
+        public List<CompanyRequest> GetCompanyRequest(int companyId)
         {
-            return await _dbContext.CompanyRequest.Where(x => x.CompanyId == companyId).ToListAsync();
+            var companyRequest = _dbContext.CompanyRequest;
+            var companyMaster = _dbContext.CompanyMaster;
+            var collegeMaster = _dbContext.CollegeMaster;
+
+            var companyRequestValue = (from cr in companyRequest
+                               join cm in companyMaster on cr.CompanyId equals cm.ID
+                               join colm in collegeMaster on cr.CollegeId equals colm.ID
+                               select new CompanyRequest
+                               {
+                                   CompanyName = cm.Name,
+                                   CollegeName = colm.Name,
+                                   RequestDate = cr.RequestDate,
+                                   Department = cr.Department,
+                                   CoreAreas = cr.CoreAreas,
+                                   Percentage = cr.Percentage,
+                                   Comments = cr.Comments
+
+                               }).ToList();
+
+            return companyRequestValue;
+            //return await _dbContext.CompanyRequest.Where(x => x.CompanyId == companyId).ToListAsync();
         }
 
        
