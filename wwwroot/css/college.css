@@ -48,7 +48,7 @@ button.accept-policy {
     text-align:center;
 }
 
-.btn-logout {
+.btn-logout, .btn-profile {
     width: 100%;
     padding: 3px 20px;
     text-align: left;

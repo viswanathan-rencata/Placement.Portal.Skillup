@@ -23,18 +23,20 @@ namespace Placement.Portal.Skillup.Controllers
         }
         
         [Authorize]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             var username = HttpContext.User.Identity.Name;
-            var customClaim = HttpContext.User.FindFirst("CompanyOrCollege");
+            var customClaim = HttpContext.User.FindFirst("CompanyOrCollege");            
+
             ViewBag.UserName = username;
-            List<CompanyRequest> cr = new();
+            List<CompanyRequest> cr = await _unitOfWork.CompanyRequestRepository.GetCompanyRequestAsync(Convert.ToInt16(HttpContext.User.FindFirst("CompanyId").Value.ToString())); 
             return View(cr);
         }
         
         public IActionResult Login()
         {
             LoginViewModel model = new();
+
             return View(model);
         }
 
@@ -151,7 +153,8 @@ namespace Placement.Portal.Skillup.Controllers
                 {
                     new Claim(ClaimTypes.Name, user.UserName),
                     new Claim(ClaimTypes.Email, user.Email),
-                    new Claim("CompanyOrCollege", user.CompanyOrCollege.ToString())
+                    new Claim("CompanyOrCollege", user.CompanyOrCollege.ToString()),
+                    new Claim("CompanyId", user.CompanyId.ToString())
                 };
 
                 var claimsIdentity = new ClaimsIdentity(

@@ -153,7 +153,7 @@
         transform: translateY(0);
     }
 
-    button {
+   /* button {
         background-color: #93E1D8;
         border: none;
         display: block;
@@ -161,7 +161,7 @@
         padding: 15px 30px;
         border-radius: 10px;
         cursor: pointer;
-    }
+    }*/
     /* Animation*/
     h2 {
         text-align: center;
@@ -285,9 +285,9 @@
     /* FontAwesome for working BootSnippet :> */
 
 
-    .container {
+    /*.container {
         padding-top: 50px;
-    }
+    }*/
 
     #messagebox {
         border: solid 1px #cecece;
@@ -541,6 +541,36 @@
         $('#clickMe').click(function () {
             $("#myDialog").dialog("open");
         });
+
+        $('#generatePDF').click(function(){
+            $.ajax({
+                type: "POST",
+                url: "/Colleges/GeneratePDF",
+                data: '',
+                contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                dataType: "html",
+                success: function (response) {
+                    debugger;
+                    openNewTab(JSON.parse(response).data);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        });
+
+         function openNewTab (response) {
+            var contentType = 'application/pdf';
+            var sliceSize = 512;
+
+            var byteCharacters = atob(response);
+            var byteArrays = [];
+
+            for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+                  var slice = byteCharacters.slice(offset, offset + sliceSize);
 
         $('.ststuscls').click(function () {
 
