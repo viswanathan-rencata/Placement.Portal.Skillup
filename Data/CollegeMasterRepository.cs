@@ -31,41 +31,48 @@ namespace Placement.Portal.Skillup.Data
             }
             return list;
         }
-        public CollegeMaster GetCollegeById()
+        public CollegeMaster GetCollegeById(int colegeId)
         {
-            AppUser user = new();
             CollegeMaster dataCollege = new();
-            user = _memoryCache.Get<AppUser>("AppUser");
+
             List<CollegeMaster> list = new();
             list = _dbContext.CollegeMaster.ToList();
             if (list.Count > 0)
             {
-                dataCollege = list.Where(x => x.ID == user.CollegeId).FirstOrDefault();
+                dataCollege = list.Where(x => x.ID == colegeId).FirstOrDefault();
             }
             return dataCollege;
         }
+        public List<CompanyRequest> GetCompanyRequestByCollegeId(int colegeId)
+        {
+           
+            List<CompanyRequest> dataCompanyRequest = new();
+            List<CompanyRequest> list = new();
+            list = _dbContext.CompanyRequest.ToList();
+            if (list.Count > 0)
+            {
+                dataCompanyRequest = list.Where(x => x.CollegeId == colegeId).ToList();
+            }
+            return dataCompanyRequest;
+        }
+
         public Students GetStudent(int studId)
         {
             throw new NotImplementedException();
         }
-        public List<Students> GetStudents()
+        public List<Students> GetStudents(int CollegeId)
         {
-            List<Students> list = new();
-            AppUser user = new();
-            user = _memoryCache.Get<AppUser>("AppUser");
+            List<Students> list = new(); 
 
             if (_dbContext.Students.FirstOrDefault() != null)
             {
-                list = _dbContext.Students.Where(x => x.CollegeId == user.CollegeId).ToList();
+                list = _dbContext.Students.Where(x => x.CollegeId == CollegeId).ToList();
             }
 
             return list;
         }
         public bool AddStudents(Students Student)
         {
-            AppUser user = new();
-            user = _memoryCache.Get<AppUser>("AppUser");
-            Student.CollegeId = Convert.ToInt64(user.CollegeId);
             _dbContext.Students.Add(Student);
             _dbContext.SaveChanges();
             return true;

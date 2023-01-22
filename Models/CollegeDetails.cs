@@ -4,5 +4,9 @@
     {
         public CollegeMaster collegeMaster { get; set; }
         public List<Students> students { get; set; }
+
+        public List<CompanyRequest> companyRequest { get; set; }
+
+
     }
 }

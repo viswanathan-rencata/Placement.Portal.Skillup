@@ -3,32 +3,49 @@
 }
 @model Placement.Portal.Skillup.Models.CollegeDetails
 
-@*<link href="~/collegedashboard/bootstrap.min.css" rel="stylesheet" />
-<script src="~/collegedashboard/bootstrap.min.js"></script>
-<script src="~/collegedashboard/jquery-1.11.1.min.js"></script>*@
 
-@*<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">*@
-@*<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>*@
-<!------ Include the above in your HEAD tag ---------->
-
-@*<script src="http://getbootstrap.com/dist/js/bootstrap.min.js"></script>*@
-
-
-@*<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>*@
-
-@*<script src="https://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>*@
 <script src="~/lib/jqueryui/jquery-ui.min.js"></script>
+@*<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">*@
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
 
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" />
-
-
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css"  />
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.js"></script>
 
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
 <style>
+    .container {
+        padding-top: 0px !important;
+    }
+
+    .glyphicon-lg {
+        font-size: 4em
+    }
+
+    .info-block {
+        border-right: 5px solid #E6E6E6;
+        margin-bottom: 25px
+    }
+
+        .info-block .square-box {
+            width: 100px;
+            min-height: 110px;
+            margin-right: 22px;
+            text-align: center !important;
+            background-color: #676767;
+            padding: 20px 0
+        }
+
+        .info-block.block-info {
+            border-color: #20819e
+        }
+
+            .info-block.block-info .square-box {
+                background-color: #20819e;
+                color: #FFF
+            }
+
     .alnright {
         text-align: left;
     }
@@ -45,18 +62,10 @@
         cursor: pointer;
     }
 </style>
+
+
+
 <style>
-    /*.container {
-
-                                                                            background: -webkit-linear-gradient(90deg, #16222A 10%, #3A6073 90%);
-                                                                            background: -moz-linear-gradient(90deg, #16222A 10%, #3A6073 90%);
-                                                                            background: -o-linear-gradient(90deg, #16222A 10%, #3A6073 90%);
-                                                                            background: linear-gradient(90deg, #16222A 10%, #3A6073 90%);
-                                                                            font-family: 'Raleway', sans-serif;
-                                                                            }*/
-
-
-
     .filterable {
         margin-top: 15px;
     }
@@ -85,13 +94,7 @@
             .filterable .filters input[disabled]:-ms-input-placeholder {
                 color: #333;
             }
-    /*body {
-                                background-color: #6D5959;
-                            }
 
-                                body * {
-                                    font-family: 'Montserrat' sans-serif;
-                                }*/
 
 
 
@@ -280,9 +283,9 @@
     /* FontAwesome for working BootSnippet :> */
 
 
-    /*.container {
+    .container {
         padding-top: 50px;
-    }*/
+    }
 
     #messagebox {
         border: solid 1px #cecece;
@@ -324,6 +327,17 @@
         border: solid 1px black;
     }
 
+    .page-title {
+        font-size: 40px;
+        color: #fff;
+        font-weight: 600;
+        text-align: center;
+        background: -webkit-linear-gradient(90deg, #16222A 10%, #3A6073 90%);
+        background: -moz-linear-gradient(90deg, #16222A 10%, #3A6073 90%);
+        background: -o-linear-gradient(90deg, #16222A 10%, #3A6073 90%);
+        border-radius: 10px !important;
+        font-family: 'Raleway', sans-serif;
+    }
 </style>
 <script>
     $(document).ready(function () {
@@ -416,15 +430,108 @@
             },
             buttons: {
                 'Submit': function () {
-                    var textValue = $('#myTextBox').val();
-                    alert('The value of the text box is ' + textValue);
-                    //Now you have the value of the textbox, you can do something with it, maybe an AJAX call to your server!
+
+                    var firstname = $('#first-name').val();
+                    var middlename = $('#middle-name').val();
+                    var lastname = $('#last-name').val();
+                    var emailid = $('#email-id').val();
+                    var studaddress = $('#stud-address').val();
+                    var studdataofbirth = $('#stud-dataofbirth').val();
+                    var studdateofjoin = $('#stud-dateofjoin').val();
+                    var studphonenumber = $('#stud-phonenumber').val();
+                    var studpercentage = $('#stud-percentage').val();
+                    var studgender = $("#stud-gender").val();
+                    var studdept = $("#stud-dept").val();
+                    var studclass = $("#stud-class").val();
+
+                    if (studgender == 'Male') {
+                        studgender = 'M';
+                    } else {
+                        studgender = 'F';
+                    }
+                    console.log(firstname);
+
+                    if (firstname == "") {
+                        //swal("First name required", "You clicked the button!", "error");
+                        swal({
+                            title: "First name required!",
+                            //text: "OK",
+                            icon: "warning",
+                            button: "OK",
+                        });
+                        //swal("Good job!", "You clicked the button!", "success")
+                        return false;
+                    }
+                    if (lastname == "") {
+
+                        swal({
+                            title: "Last name required!",
+                            //text: "OK",
+                            icon: "warning",
+                            button: "OK",
+                        });
+                        //swal("Good job!", "You clicked the button!", "success")
+                        return false;
+                    }
+
+
+
+
+
+                    var studentDetails = {
+                        'FirstName': firstname,
+                        'MiddleName': middlename,
+                        'LastName': lastname,
+                        'Gender': studgender,
+                        'Email': emailid,
+                        'DOB': studdataofbirth,
+                        'DOJ': studdateofjoin,
+                        'Dept': studdept,
+                        'ClassName': studclass,
+                        'Address': studaddress,
+                        'PhoneNumber': studphonenumber,
+                        'Percentage': studpercentage
+                    };
+
+                    $.ajax({
+                        type: "POST",
+                        //url: "/Home/AjaxMethod",
+                        url: "/Colleges/AjaxStudentPostCall",
+                        data: studentDetails,
+                        success: function (response) {
+                            //alert("Hello: " + response + " .\nCurrent Date and Time: " + response);
+                            swal({
+                                title: "Good job!",
+                                text: "Record Saved!",
+                                icon: "Success",
+                                button: "OK",
+                            });
+
+                            window.location.reload();
+
+
+                        },
+                        failure: function (response) {
+                            //alert(response.responseText);
+                        },
+                        error: function (response) {
+                            //alert(response.responseText);
+                        }
+                    });
+
                 }
-                //,
-                //'Close': function () {
-                //    alert('The Close button was clicked');
-                //    $(this).dialog('close');
-                //}
+
+            }
+        });
+        $("#myDialogStatus").dialog({
+            autoOpen: false,
+            show: {
+                effect: "blind",
+                duration: 1500
+            },
+            hide: {
+                effect: "explode",
+                duration: 1000
             }
         });
 
@@ -433,7 +540,36 @@
             $("#myDialog").dialog("open");
         });
 
-        $('#generatePDF').click(function(){
+        $('.ststuscls').click(function () {
+
+            $("#myDialogStatus").dialog("open");
+        });
+
+        $(".mat-input").focus(function () {
+            $(this).parent().addClass("is-active is-completed");
+        });
+        $(".mat-input").focusout(function () {
+            if ($(this).val() === "")
+                $(this).parent().removeClass("is-completed");
+            $(this).parent().removeClass("is-active");
+        });
+
+
+        $('.btnOffer').click(function (e) {
+            e.preventDefault();  //stop the browser from following
+
+            window.open("File/functionalsample.pdf", "_blank");
+        });
+
+        $('#input-search').on('keyup', function () {
+            var rex = new RegExp($(this).val(), 'i');
+            $('.searchable-container .items').hide();
+            $('.searchable-container .items').filter(function () {
+                return rex.test($(this).text());
+            }).show();
+        });
+        $("#tabs").tabs();
+        $('.generatePDF').click(function () {
             $.ajax({
                 type: "POST",
                 url: "/Colleges/GeneratePDF",
@@ -453,214 +589,230 @@
             });
         });
 
-         function openNewTab (response) {
+        function openNewTab(response) {
             var contentType = 'application/pdf';
             var sliceSize = 512;
-
             var byteCharacters = atob(response);
             var byteArrays = [];
-
             for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-                  var slice = byteCharacters.slice(offset, offset + sliceSize);
-
-                  var byteNumbers = new Array(slice.length);
-                  for (var i = 0; i < slice.length; i++) {
+                var slice = byteCharacters.slice(offset, offset + sliceSize);
+                var byteNumbers = new Array(slice.length);
+                for (var i = 0; i < slice.length; i++) {
                     byteNumbers[i] = slice.charCodeAt(i);
-                  }
-
-                  var byteArray = new Uint8Array(byteNumbers);
-
-                  byteArrays.push(byteArray);
+                }
+                var byteArray = new Uint8Array(byteNumbers);
+                byteArrays.push(byteArray);
             }
-
-            var blob = new Blob(byteArrays, {type: contentType});
+            var blob = new Blob(byteArrays, { type: contentType });
             blob = b64toBlob(response, contentType);
             var blobUrl = URL.createObjectURL(blob);
-
             window.open(blobUrl);
         }
-
-        function b64toBlob (b64Data, contentType = '', sliceSize = 512) {
+        function b64toBlob(b64Data, contentType = '', sliceSize = 512) {
             const byteCharacters = atob(b64Data);
             const byteArrays = [];
-
             for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
                 const slice = byteCharacters.slice(offset, offset + sliceSize);
-
                 const byteNumbers = new Array(slice.length);
                 for (let i = 0; i < slice.length; i++) {
                     byteNumbers[i] = slice.charCodeAt(i);
                 }
-
                 const byteArray = new Uint8Array(byteNumbers);
                 byteArrays.push(byteArray);
             }
-
             const blob = new Blob(byteArrays, { type: contentType });
             return blob;
         }
-
-        $(".mat-input").focus(function () {
-            $(this).parent().addClass("is-active is-completed");
-        });
-        $(".mat-input").focusout(function () {
-            if ($(this).val() === "")
-                $(this).parent().removeClass("is-completed");
-            $(this).parent().removeClass("is-active");
-        });
-
-        //$("#btnOffer").click(function (e) {
-        //    e.preventDefault();
-        //    window.location.href = "File/functionalsample.pdf";
-        //});
-        $('.btnOffer').click(function (e) {
-            e.preventDefault();  //stop the browser from following
-
-            window.open("File/functionalsample.pdf", "_blank");
-        });
     });
 
 </script>
 <div class="container-fluid">
-    <div class="row">
-        <div class="container">
-            
-            <h2>College Partners</h2>
-             <hr />
-            <section class="customer-logos slider">
-                <div class="slide" style="border-radius:10px"><img src="https://image.freepik.com/free-vector/luxury-letter-e-logo-design_1017-8903.jpg"></div>
-                
-                <div class="slide"><img src="https://image.freepik.com/free-vector/3d-box-logo_1103-876.jpg"></div>
-                <div class="slide"><img src="https://image.freepik.com/free-vector/blue-tech-logo_1103-822.jpg"></div>
-                <div class="slide"><img src="https://image.freepik.com/free-vector/colors-curl-logo-template_23-2147536125.jpg"></div>
-                <div class="slide"><img src="https://image.freepik.com/free-vector/abstract-cross-logo_23-2147536124.jpg"></div>
-                <div class="slide"><img src="https://image.freepik.com/free-vector/football-logo-background_1195-244.jpg"></div>
-                <div class="slide"><img src="https://image.freepik.com/free-vector/background-of-spots-halftone_1035-3847.jpg"></div>                 
-                <div class="slide" style="border-radius:10px"><img src="https://image.freepik.com/free-vector/luxury-letter-e-logo-design_1017-8903.jpg"></div>
-                
-                <div class="slide"><img src="https://image.freepik.com/free-vector/3d-box-logo_1103-876.jpg"></div>
-                <div class="slide"><img src="https://image.freepik.com/free-vector/blue-tech-logo_1103-822.jpg"></div>
-                <div class="slide"><img src="https://image.freepik.com/free-vector/colors-curl-logo-template_23-2147536125.jpg"></div>
-                <div class="slide"><img src="https://image.freepik.com/free-vector/abstract-cross-logo_23-2147536124.jpg"></div>
-                <div class="slide"><img src="https://image.freepik.com/free-vector/football-logo-background_1195-244.jpg"></div>
-                <div class="slide"><img src="https://image.freepik.com/free-vector/background-of-spots-halftone_1035-3847.jpg"></div>
-                 
-            </section>
-        </div>
-    </div>
-   @* <hr />
-    <div class="row">
-        <div class="container">
-            <hr />
-            <h2>Shortlisted Students</h2>
-            <hr />
-            <section class="customer-logos slider">                
-                 
-                <div class="slide" style="border-radius:10px"><img src="https://image.freepik.com/free-vector/luxury-letter-e-logo-design_1017-8903.jpg"></div>
-                <div class="slide"><img src="https://image.freepik.com/free-vector/3d-box-logo_1103-876.jpg"></div>
-                <div class="slide"><img src="https://image.freepik.com/free-vector/blue-tech-logo_1103-822.jpg"></div>
-                <div class="slide"><img src="https://image.freepik.com/free-vector/colors-curl-logo-template_23-2147536125.jpg"></div>
-                <div class="slide"><img src="https://image.freepik.com/free-vector/abstract-cross-logo_23-2147536124.jpg"></div>
-                <div class="slide"><img src="https://image.freepik.com/free-vector/football-logo-background_1195-244.jpg"></div>
-                <div class="slide"><img src="https://image.freepik.com/free-vector/background-of-spots-halftone_1035-3847.jpg"></div>
-                <div class="slide"><img src="https://image.freepik.com/free-vector/3d-box-logo_1103-876.jpg"></div>
-                <div class="slide"><img src="https://image.freepik.com/free-vector/blue-tech-logo_1103-822.jpg"></div>
-                <div class="slide"><img src="https://image.freepik.com/free-vector/colors-curl-logo-template_23-2147536125.jpg"></div>
-                <div class="slide"><img src="https://image.freepik.com/free-vector/abstract-cross-logo_23-2147536124.jpg"></div>
-                <div class="slide"><img src="https://image.freepik.com/free-vector/football-logo-background_1195-244.jpg"></div>
-                <div class="slide"><img src="https://image.freepik.com/free-vector/background-of-spots-halftone_1035-3847.jpg"></div>
-
-            </section>
-        </div>
-    </div>
-    <hr />*@
-    
-    <h2>Students Details</h2>
-    <hr />
-    <div class="row">
-         <div class="table-responsive filterable" style="height:530px!important;">
-        <div class="panel-heading">
-            <button class="btn btn-primary" id="clickMe">Add Student</button>
-            <button class="btn btn-primary" id="generatePDF">Generate PDF</button>
-            <div class="pull-right">
-                <button class="btn btn-default btn-xs btn-filter"><span class="glyphicon glyphicon-filter"></span> Filter</button>
+     <br />
+    <div class="container page-header">
+       
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="page-caption">
+                    <h1 class="page-title">@ViewBag.CollegeName</h1>
+                </div>
             </div>
         </div>
+    </div>
+    <br />
+    <div class="container">
+        <div id="tabs">
+            <ul>
+                <li><a href="#tabs-1">Student Details</a></li>
+                <li><a href="#tabs-2">Company Request Notification</a></li>
 
-        <table id="mytable" class="table table-bordred table-striped">
+            </ul>
+            <div id="tabs-1">
+                <h2>Student Details</h2>
+                <input type="hidden" id="collegeId" value="@Model.collegeMaster.ID" />
+                <input type="hidden" id="collegeName" value="@Model.collegeMaster.Name" />
+                <div class="table-responsive-lg filterable" style="height:700px!important;overflow:scroll;">
+                    <div class="pull-right">
+                        <button class="btn btn-primary  btn-filter"><span class="glyphicon glyphicon-filter"></span> Filter</button>
+                    </div>
+                    <div class="pull-left">
+                        <button id="clickMe" class="btn btn-primary  btn-filter"><span class="glyphicon glyphicon-plus"></span> Add</button>
+                    </div>
 
-            @* <a href="#" class="btn btn-primary btn-xs pull-right"><b>+</b> Add Student</a>*@
-            <thead>
-                <tr class="filters">
-                    <th><input type="text" class="form-control" placeholder="Id" disabled></th>
-                    <th><input type="text" class="form-control" placeholder="Name" disabled></th>
-                    <th><input type="text" class="form-control" placeholder="Gender" disabled></th>
-                    <th style="display:none"><input type="text" class="form-control" placeholder="Email" disabled></th>
-                    <th style="display:none"><input type="text" class="form-control" placeholder="DOB" disabled></th>
-                    <th style="display:none"><input type="text" class="form-control" placeholder="DOJ" disabled></th>
-                    <th><input type="text" class="form-control" placeholder="Class" disabled></th>
-                    <th><input type="text" class="form-control" placeholder="Department" disabled></th>
-                    <th><input type="text" class="form-control" placeholder="Phone Number" disabled></th>
-                    <th><input type="text" class="form-control" placeholder="Address" disabled></th>
-                    <th><input type="text" class="form-control" placeholder="Action" disabled readonly></th>
-                </tr>
+                    <table id="mytable" class="table table-bordred table-striped">
+                        <thead>
+                            <tr class="filters">
 
-                @*<th>Delete</th>*@
-            </thead>
-            <tbody>
-                @foreach (var item in Model.students)
-                {
-                    <tr>
-                        <td style="width:60px">
-                            @item.Id
-                        </td>
-                        <td style="width:80px">
-                            @item.FirstName @item.MiddleName @item.LastName
-                        </td>
-                        <td style="width:70px">
-                            @item.Gender
-                        </td>
-                        <td style="display:none;width:1px">
-                            @item.Email
-                        </td>
-                        <td style="display:none;width:1px">
-                            @item.DOJ.ToString("MM/dd/yyyy")
-                        </td>
-                        <td style="display:none;width:1px">
-                            @item.DOB.ToString("MM/dd/yyyy")
-                        </td>
-                        <td style="width:70px">
-                            @item.ClassName
-                        </td>
-                        <td style="width:70px">
-                            @item.Dept
-                        </td>
-                        <td style="width:70px">
-                            @item.PhoneNumber
-                        </td>
-                        <td style="width:100px">
-                            @item.Address
-                        </td>
-                        <td style="width:40px">
+                                <th><input type="text" class="form-control" placeholder="Name" disabled></th>
+                                <th><input type="text" class="form-control" placeholder="Gender" disabled></th>
+                                <th style="display:block"><input type="text" class="form-control" placeholder="Email" disabled></th>
+                                <th style="display:none"><input type="text" class="form-control" placeholder="DOB" disabled></th>
+                                <th style="display:none"><input type="text" class="form-control" placeholder="DOJ" disabled></th>
+                                <th><input type="text" class="form-control" placeholder="Class" disabled></th>
+                                <th><input type="text" class="form-control" placeholder="Department" disabled></th>
+                                <th><input type="text" class="form-control" placeholder="Phone Number" disabled></th>
+                                <th><input type="text" class="form-control" placeholder="Address" disabled></th>
+                                <th><input type="text" class="form-control" placeholder="Status" disabled></th>
 
-                            <a class="btnOffer" href="no-script.html">
-                                <span class="glyphicon glyphicon-download-alt">
-                                </span>
-                            </a>
+                                <th><input type="text" class="form-control" placeholder="Offer" disabled readonly></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.students)
+                            {
+
+                                <tr>
+
+                                    <td style="width:80px" class="alnright">
+                                        <lable>@item.FirstName @item.MiddleName @item.LastName</lable>
+
+                                    </td>
+                                    @if (item.Gender == 'M')
+                                    {
+                                        <td style="width:70px" class="alnright">
+                                            <lable>Male</lable>
+                                        </td>
+
+                                    }
+                                    else
+                                    {
+                                        <td style="width:70px" class="alnright">
+                                            <lable>Female</lable>
+                                        </td>
+                                    }
+
+                                    <td style="width:60px" class="alnright">
+                                        @item.Email
+
+                                    </td>
+                                    <td style="display:none;width:1px">
+                                        @item.DOJ.ToString("MM/dd/yyyy")
+                                    </td>
+                                    <td style="display:none;width:1px">
+                                        @item.DOB.ToString("MM/dd/yyyy")
+                                    </td>
+                                    <td style="width:70px" class="alnright">
+                                        @item.ClassName
+                                    </td>
+                                    <td style="width:70px" class="alnright">
+                                        @item.Dept
+                                    </td>
+                                    <td style="width:70px" class="alnright">
+                                        @item.PhoneNumber
+                                    </td>
+                                    <td style="width:100px" class="alnright">
+                                        @item.Address
+                                    </td>
+                                    @if (item.Status == "Selected")
+                                    {
+                                        <td style="width:100px" class="alnright">
+                                            <label class="statusColorG ststuscls">@item.Status</label>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td style="width:100px" class="alnright">
+                                            <label class="statusColorRed ststuscls">@item.Status</label>
+                                        </td>
+                                    }
+
+                                    @if (item.Status == "Selected")
+                                    {
+                                        <td style="width:40px">
+
+                                            <a class="generatePDF">
+                                                <span style="font-size: 20px;" class="glyphicon glyphicon-download-alt">
+                                                </span>
+                                            </a>
 
 
-                        </td>
-                    </tr>
-                }
+                                        </td>
 
-                </tbody>
+                                    }
+                                    else
+                                    {
+                                        <td style="width:40px"></td>
 
-            </table>
+                                    }
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+            </div>
+            <div id="tabs-2">
+                <div class="row" style="height:700px!important;overflow-y:scroll;">
+                    <div class="row">
+                        <h2>Company Request Notification</h2>
+                        <div class="col-lg-12">
+                            <input type="search" class="form-control" id="input-search" placeholder="Search Company...">
+                            <br />
+                        </div>
+                        <br />
+                    </div>
+
+                    <div class="searchable-container">
+                        @foreach (var item in Model.companyRequest)
+                        {
+                            <div class="items col-xs-12 col-sm-6 col-md-6 col-lg-6 clearfix">
+                                <div class="info-block block-info clearfix">
+                                    <div class="square-box pull-left" style="border-radius:10px!important;">
+                                        <span class="glyphicon glyphicon-envelope glyphicon-lg"></span>
+                                    </div>
+                                    <h1>@item.CompanyName</h1>
+                                    <h4>Department: @item.Department</h4>
+                                    <h4>Class: @item.CoreAreas</h4>
+
+                                    @if (!string.IsNullOrEmpty(item.RequestDate.ToString()))
+                                    {
+                                        <p>Interview Date: @item.RequestDate.ToString()</p>
+                                    }
+                                    else
+                                    {
+                                        <p>Interview Date: @item.RequestDate</p>
+
+                                    }
+                                    <span>Phone: 555-555-5555</span>
+                                    <span>Email: sample@company.com</span>
+                                    <h4>By: HR </h4>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+
+
+            </div>
+
 
         </div>
     </div>
-
-
 
     <div id="myDialog">
         <div class="modal-body row">
@@ -709,9 +861,9 @@
                 <div class="mat-div">
                     <select class="mat-input" id="stud-dept">
                         <option>Information Technology</option>
-                        <option>Science</option>
+                        <option>Computer Science</option>
                         <option>Nural Network</option>
-                        <option>Mining</option>
+                        <option>Electronics</option>
                     </select>
                 </div>
                 <div class="mat-div">
@@ -720,6 +872,11 @@
                         <option>MSC</option>
                         <option>Data Mining</option>
                         <option>CCNA Network Programming</option>
+                        <option>EEE</option>
+                        <option>IT</option>
+                        <option>CSE</option>
+                        <option>CSE</option>
+
                     </select>
                 </div>
                 <div class="mat-div">
@@ -801,82 +958,8 @@
             </div>
 
         </div>
-
-        @*  <div class="row" style="margin-top: 5em;">
-
-        <div class="col-md-12 fail" id="messagebox">
-        <div class="row">
-        <div class="col-md-2" id="messagebox-icon">
-        <span class="fa fa-2x fa-times text-danger"></span>
-        </div>
-        <div class="col-md-10">
-        <div class="row h5" id="messagebox-header">Process Failed to Complete</div>
-        <div class="row">
-        <div class="col-md-1">
-        <span class="fa fa-times-circle text-danger"></span>
-        </div>
-        <div class="col-md-10">
-        Item 1  done
-        </div>
-        </div>
-        <div class="row">
-        <div class="col-md-1">
-        <span class="fa fa-times-circle text-danger"></span>
-        </div>
-        <div class="col-md-10">
-        Item 1  done
-        </div>
-        </div>
-        </div>
-        </div>
-        <div class="row">
-        <div class="pull-right" id="messagebox-detail-link">
-        <a href="#">More Information</a>
-        </div>
-        </div>
-        </div>
-
-        </div>
-
-        <div class="row" style="margin-top: 5em;">
-
-        <div class="col-md-12 warning" id="messagebox">
-        <div class="row">
-        <div class="col-md-2" id="messagebox-icon">
-        <span class="fa fa-2x fa-exclamation-triangle text-warning"></span>
-        </div>
-        <div class="col-md-10">
-        <div class="row h5" id="messagebox-header">
-        Process Completed with Errors
-        </div>
-        <div class="row">
-        <div class="col-md-1">
-        <span class="fa fa-check-circle text-success"></span>
-        </div>
-        <div class="col-md-10">
-        Item 1  done
-        </div>
-        </div>
-        <div class="row">
-        <div class="col-md-1">
-        <span class="fa fa-times-circle text-danger"></span>
-        </div>
-        <div class="col-md-10">
-        Item 1  done
-        </div>
-        </div>
-        </div>
-        </div>
-        <div class="row">
-        <div class="pull-right" id="messagebox-detail-link">
-        <a href="#">More Information</a>
-        </div>
-        </div>
-        </div>
-
-        </div>*@
     </div>
-    
+
 </div>
 
 
