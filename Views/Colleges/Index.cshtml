@@ -148,7 +148,7 @@
         transform: translateY(0);
     }
 
-    button {
+   /* button {
         background-color: #93E1D8;
         border: none;
         display: block;
@@ -156,7 +156,7 @@
         padding: 15px 30px;
         border-radius: 10px;
         cursor: pointer;
-    }
+    }*/
     /* Animation*/
     h2 {
         text-align: center;
@@ -280,9 +280,9 @@
     /* FontAwesome for working BootSnippet :> */
 
 
-    .container {
+    /*.container {
         padding-top: 50px;
-    }
+    }*/
 
     #messagebox {
         border: solid 1px #cecece;
@@ -433,6 +433,73 @@
             $("#myDialog").dialog("open");
         });
 
+        $('#generatePDF').click(function(){
+            $.ajax({
+                type: "POST",
+                url: "/Colleges/GeneratePDF",
+                data: '',
+                contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                dataType: "html",
+                success: function (response) {
+                    debugger;
+                    openNewTab(JSON.parse(response).data);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        });
+
+         function openNewTab (response) {
+            var contentType = 'application/pdf';
+            var sliceSize = 512;
+
+            var byteCharacters = atob(response);
+            var byteArrays = [];
+
+            for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+                  var slice = byteCharacters.slice(offset, offset + sliceSize);
+
+                  var byteNumbers = new Array(slice.length);
+                  for (var i = 0; i < slice.length; i++) {
+                    byteNumbers[i] = slice.charCodeAt(i);
+                  }
+
+                  var byteArray = new Uint8Array(byteNumbers);
+
+                  byteArrays.push(byteArray);
+            }
+
+            var blob = new Blob(byteArrays, {type: contentType});
+            blob = b64toBlob(response, contentType);
+            var blobUrl = URL.createObjectURL(blob);
+
+            window.open(blobUrl);
+        }
+
+        function b64toBlob (b64Data, contentType = '', sliceSize = 512) {
+            const byteCharacters = atob(b64Data);
+            const byteArrays = [];
+
+            for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+                const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+                const byteNumbers = new Array(slice.length);
+                for (let i = 0; i < slice.length; i++) {
+                    byteNumbers[i] = slice.charCodeAt(i);
+                }
+
+                const byteArray = new Uint8Array(byteNumbers);
+                byteArrays.push(byteArray);
+            }
+
+            const blob = new Blob(byteArrays, { type: contentType });
+            return blob;
+        }
+
         $(".mat-input").focus(function () {
             $(this).parent().addClass("is-active is-completed");
         });
@@ -514,6 +581,7 @@
          <div class="table-responsive filterable" style="height:530px!important;">
         <div class="panel-heading">
             <button class="btn btn-primary" id="clickMe">Add Student</button>
+            <button class="btn btn-primary" id="generatePDF">Generate PDF</button>
             <div class="pull-right">
                 <button class="btn btn-default btn-xs btn-filter"><span class="glyphicon glyphicon-filter"></span> Filter</button>
             </div>
