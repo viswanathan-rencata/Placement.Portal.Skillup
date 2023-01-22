@@ -10,8 +10,14 @@ namespace Placement.Portal.Skillup.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
+        [Column("CompanyId")]
+        public int CompanyId { get; set; }
+
         [Column("CompanyName")]
         public string CompanyName { get; set; }
+
+        [Column("CollegeId")]
+        public int CollegeId { get; set; }
 
         [Column("CollegeName")]
         public string CollegeName { get; set; }
@@ -28,7 +34,7 @@ namespace Placement.Portal.Skillup.Models
         public string CoreAreas { get; set; }
 
         [Column("CGPAPercent")]
-        public int? Percentage { get; set; }
+        public decimal Percentage { get; set; }
 
         [Column("Comments")]
         public string Comments { get; set; }
