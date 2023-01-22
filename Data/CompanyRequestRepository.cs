@@ -3,6 +3,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Placement.Portal.Skillup.Interface.Data;
 using Placement.Portal.Skillup.Models;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 
 namespace Placement.Portal.Skillup.Data
 {
@@ -19,9 +20,11 @@ namespace Placement.Portal.Skillup.Data
             await _dbContext.AddAsync(companyRequest);
         }
 
-        public async Task<CompanyRequest> GetCompanyRequestAsync(string name)
+        public async Task<List<CompanyRequest>> GetCompanyRequestAsync(int companyId)
         {
-            return await _dbContext.CompanyRequest.SingleOrDefaultAsync(x => x.CompanyName == name);
+            return await _dbContext.CompanyRequest.Where(x => x.CompanyId == companyId).ToListAsync();
         }
+
+       
     }
 }
