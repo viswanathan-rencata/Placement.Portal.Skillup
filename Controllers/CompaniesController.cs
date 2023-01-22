@@ -28,7 +28,8 @@ namespace Placement.Portal.Skillup.Controllers
             var username = HttpContext.User.Identity.Name;
             var customClaim = HttpContext.User.FindFirst("CompanyOrCollege");
             ViewBag.UserName = username;
-            return View();
+            List<CompanyRequest> cr = new();
+            return View(cr);
         }
         
         public IActionResult Login()
@@ -163,7 +164,7 @@ namespace Placement.Portal.Skillup.Controllers
                     new ClaimsPrincipal(claimsIdentity),
                     authProperties);
 
-                return View("CompanyRequest");
+                return RedirectToAction("Index");
             }
             else
             {
