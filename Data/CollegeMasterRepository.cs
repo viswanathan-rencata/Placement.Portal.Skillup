@@ -45,13 +45,13 @@ namespace Placement.Portal.Skillup.Data
         }
         public List<CompanyRequest> GetCompanyRequestByCollegeId(int colegeId)
         {
-            var collegeName =  GetCollegeById(colegeId).Name;
+           
             List<CompanyRequest> dataCompanyRequest = new();
             List<CompanyRequest> list = new();
             list = _dbContext.CompanyRequest.ToList();
             if (list.Count > 0)
             {
-                dataCompanyRequest = list.Where(x => x.CollegeName.Contains(collegeName)).ToList();
+                dataCompanyRequest = list.Where(x => x.CollegeId == colegeId).ToList();
             }
             return dataCompanyRequest;
         }

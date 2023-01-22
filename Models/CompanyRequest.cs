@@ -23,9 +23,9 @@ namespace Placement.Portal.Skillup.Models
         public string CollegeName { get; set; }
 
         [Column("RequestDate")]
-        //[DataType(DataType.Date)]
-        //[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public string RequestDate { get; set; }
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime RequestDate { get; set; }
 
         [Column("Department")]
         public string Department { get; set; }

@@ -5,12 +5,10 @@
 
 
 <script src="~/lib/jqueryui/jquery-ui.min.js"></script>
-
+@*<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">*@
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
 
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" />
-
-<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css"  />
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.js"></script>
 
@@ -285,9 +283,9 @@
     /* FontAwesome for working BootSnippet :> */
 
 
-    /*.container {
+    .container {
         padding-top: 50px;
-    }*/
+    }
 
     #messagebox {
         border: solid 1px #cecece;
@@ -542,36 +540,6 @@
             $("#myDialog").dialog("open");
         });
 
-        $('#generatePDF').click(function(){
-            $.ajax({
-                type: "POST",
-                url: "/Colleges/GeneratePDF",
-                data: '',
-                contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-                dataType: "html",
-                success: function (response) {
-                    debugger;
-                    openNewTab(JSON.parse(response).data);
-                },
-                failure: function (response) {
-                    alert(response.responseText);
-                },
-                error: function (response) {
-                    alert(response.responseText);
-                }
-            });
-        });
-
-         function openNewTab (response) {
-            var contentType = 'application/pdf';
-            var sliceSize = 512;
-
-            var byteCharacters = atob(response);
-            var byteArrays = [];
-
-            for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-                  var slice = byteCharacters.slice(offset, offset + sliceSize);
-
         $('.ststuscls').click(function () {
 
             $("#myDialogStatus").dialog("open");
@@ -601,11 +569,67 @@
             }).show();
         });
         $("#tabs").tabs();
+        $('.generatePDF').click(function () {
+            $.ajax({
+                type: "POST",
+                url: "/Colleges/GeneratePDF",
+                data: '',
+                contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                dataType: "html",
+                success: function (response) {
+                    debugger;
+                    openNewTab(JSON.parse(response).data);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        });
+
+        function openNewTab(response) {
+            var contentType = 'application/pdf';
+            var sliceSize = 512;
+            var byteCharacters = atob(response);
+            var byteArrays = [];
+            for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+                var slice = byteCharacters.slice(offset, offset + sliceSize);
+                var byteNumbers = new Array(slice.length);
+                for (var i = 0; i < slice.length; i++) {
+                    byteNumbers[i] = slice.charCodeAt(i);
+                }
+                var byteArray = new Uint8Array(byteNumbers);
+                byteArrays.push(byteArray);
+            }
+            var blob = new Blob(byteArrays, { type: contentType });
+            blob = b64toBlob(response, contentType);
+            var blobUrl = URL.createObjectURL(blob);
+            window.open(blobUrl);
+        }
+        function b64toBlob(b64Data, contentType = '', sliceSize = 512) {
+            const byteCharacters = atob(b64Data);
+            const byteArrays = [];
+            for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+                const slice = byteCharacters.slice(offset, offset + sliceSize);
+                const byteNumbers = new Array(slice.length);
+                for (let i = 0; i < slice.length; i++) {
+                    byteNumbers[i] = slice.charCodeAt(i);
+                }
+                const byteArray = new Uint8Array(byteNumbers);
+                byteArrays.push(byteArray);
+            }
+            const blob = new Blob(byteArrays, { type: contentType });
+            return blob;
+        }
     });
 
 </script>
 <div class="container-fluid">
+     <br />
     <div class="container page-header">
+       
         <div class="row">
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                 <div class="page-caption">
@@ -614,6 +638,7 @@
             </div>
         </div>
     </div>
+    <br />
     <div class="container">
         <div id="tabs">
             <ul>
@@ -625,7 +650,7 @@
                 <h2>Student Details</h2>
                 <input type="hidden" id="collegeId" value="@Model.collegeMaster.ID" />
                 <input type="hidden" id="collegeName" value="@Model.collegeMaster.Name" />
-                <div class="table-responsive-lg filterable" style="height:700px!important;overflow-y:scroll;">
+                <div class="table-responsive-lg filterable" style="height:700px!important;overflow:scroll;">
                     <div class="pull-right">
                         <button class="btn btn-primary  btn-filter"><span class="glyphicon glyphicon-filter"></span> Filter</button>
                     </div>
@@ -655,81 +680,81 @@
                             @foreach (var item in Model.students)
                             {
 
-                            <tr>
+                                <tr>
 
-                                <td style="width:80px" class="alnright">
-                                    <lable>@item.FirstName @item.MiddleName @item.LastName</lable>
+                                    <td style="width:80px" class="alnright">
+                                        <lable>@item.FirstName @item.MiddleName @item.LastName</lable>
 
-                                </td>
-                                @if (item.Gender == 'M')
+                                    </td>
+                                    @if (item.Gender == 'M')
                                     {
-                                <td style="width:70px" class="alnright">
-                                    <lable>Male</lable>
-                                </td>
+                                        <td style="width:70px" class="alnright">
+                                            <lable>Male</lable>
+                                        </td>
 
                                     }
                                     else
                                     {
-                                <td style="width:70px" class="alnright">
-                                    <lable>Female</lable>
-                                </td>
+                                        <td style="width:70px" class="alnright">
+                                            <lable>Female</lable>
+                                        </td>
                                     }
 
-                                <td style="width:60px" class="alnright">
-                                    @item.Email
+                                    <td style="width:60px" class="alnright">
+                                        @item.Email
 
-                                </td>
-                                <td style="display:none;width:1px">
-                                    @item.DOJ.ToString("MM/dd/yyyy")
-                                </td>
-                                <td style="display:none;width:1px">
-                                    @item.DOB.ToString("MM/dd/yyyy")
-                                </td>
-                                <td style="width:70px" class="alnright">
-                                    @item.ClassName
-                                </td>
-                                <td style="width:70px" class="alnright">
-                                    @item.Dept
-                                </td>
-                                <td style="width:70px" class="alnright">
-                                    @item.PhoneNumber
-                                </td>
-                                <td style="width:100px" class="alnright">
-                                    @item.Address
-                                </td>
-                                @if (item.Status == "Selected")
+                                    </td>
+                                    <td style="display:none;width:1px">
+                                        @item.DOJ.ToString("MM/dd/yyyy")
+                                    </td>
+                                    <td style="display:none;width:1px">
+                                        @item.DOB.ToString("MM/dd/yyyy")
+                                    </td>
+                                    <td style="width:70px" class="alnright">
+                                        @item.ClassName
+                                    </td>
+                                    <td style="width:70px" class="alnright">
+                                        @item.Dept
+                                    </td>
+                                    <td style="width:70px" class="alnright">
+                                        @item.PhoneNumber
+                                    </td>
+                                    <td style="width:100px" class="alnright">
+                                        @item.Address
+                                    </td>
+                                    @if (item.Status == "Selected")
                                     {
-                                <td style="width:100px" class="alnright">
-                                    <label class="statusColorG ststuscls">@item.Status</label>
-                                </td>
+                                        <td style="width:100px" class="alnright">
+                                            <label class="statusColorG ststuscls">@item.Status</label>
+                                        </td>
                                     }
                                     else
                                     {
-                                <td style="width:100px" class="alnright">
-                                    <label class="statusColorRed ststuscls">@item.Status</label>
-                                </td>
+                                        <td style="width:100px" class="alnright">
+                                            <label class="statusColorRed ststuscls">@item.Status</label>
+                                        </td>
                                     }
 
-                                @if (item.Status == "Selected")
+                                    @if (item.Status == "Selected")
                                     {
-                                <td style="width:40px">
+                                        <td style="width:40px">
 
-                                    <a class="btnOffer" href="no-script.html">
-                                        <span style="font-size: 20px;" class="glyphicon glyphicon-download-alt">
-                                        </span>
-                                    </a>
+                                            <a class="generatePDF">
+                                                <span style="font-size: 20px;" class="glyphicon glyphicon-download-alt">
+                                                </span>
+                                            </a>
 
 
-                                </td>
+                                        </td>
 
                                     }
                                     else
                                     {
-                                <td style="width:40px"></td>
+                                        <td style="width:40px"></td>
 
                                     }
 
-                            </tr>
+                                </tr>
                             }
 
                         </tbody>
@@ -754,29 +779,29 @@
                     <div class="searchable-container">
                         @foreach (var item in Model.companyRequest)
                         {
-                        <div class="items col-xs-12 col-sm-6 col-md-6 col-lg-6 clearfix">
-                            <div class="info-block block-info clearfix">
-                                <div class="square-box pull-left" style="border-radius:10px!important;">
-                                    <span class="glyphicon glyphicon-envelope glyphicon-lg"></span>
-                                </div>
-                                <h1>@item.CompanyName</h1>
-                                <h4>Department: @item.Department</h4>
-                                <h4>Class: @item.CoreAreas</h4>
+                            <div class="items col-xs-12 col-sm-6 col-md-6 col-lg-6 clearfix">
+                                <div class="info-block block-info clearfix">
+                                    <div class="square-box pull-left" style="border-radius:10px!important;">
+                                        <span class="glyphicon glyphicon-envelope glyphicon-lg"></span>
+                                    </div>
+                                    <h1>@item.CompanyName</h1>
+                                    <h4>Department: @item.Department</h4>
+                                    <h4>Class: @item.CoreAreas</h4>
 
-                                @if (!string.IsNullOrEmpty(item.RequestDate.ToString()))
+                                    @if (!string.IsNullOrEmpty(item.RequestDate.ToString()))
                                     {
-                                <p>Interview Date: @item.RequestDate.ToString()</p>
+                                        <p>Interview Date: @item.RequestDate.ToString()</p>
                                     }
                                     else
                                     {
-                                <p>Interview Date: @item.RequestDate</p>
+                                        <p>Interview Date: @item.RequestDate</p>
 
                                     }
-                                <span>Phone: 555-555-5555</span>
-                                <span>Email: sample@company.com</span>
-                                <h4>By: HR </h4>
+                                    <span>Phone: 555-555-5555</span>
+                                    <span>Email: sample@company.com</span>
+                                    <h4>By: HR </h4>
+                                </div>
                             </div>
-                        </div>
                         }
                     </div>
                 </div>
