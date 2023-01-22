@@ -21,16 +21,42 @@
 <script src="~/lib/jqueryui/jquery-ui.min.js"></script>
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
 
-@*<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.js"></script>*@
-<script src="~/lib/slick-carousel/slick.min.js"></script>
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" />
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.js"></script>
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<style>
+    .alnright {
+        text-align: left;
+    }
+
+    .statusColorG {
+        color: darkgreen;
+    }
+
+    .statusColorRed {
+        color: darkred;
+    }
+
+    .ststuscls {
+        cursor: pointer;
+    }
+</style>
 <style>
     /*.container {
-                                                                                background: -webkit-linear-gradient(90deg, #16222A 10%, #3A6073 90%);
-                                                                                background: -moz-linear-gradient(90deg, #16222A 10%, #3A6073 90%);
-                                                                                background: -o-linear-gradient(90deg, #16222A 10%, #3A6073 90%);
-                                                                                background: linear-gradient(90deg, #16222A 10%, #3A6073 90%);
-                                                                                font-family: 'Raleway', sans-serif;
-                                                                                }*/
+
+                                                                            background: -webkit-linear-gradient(90deg, #16222A 10%, #3A6073 90%);
+                                                                            background: -moz-linear-gradient(90deg, #16222A 10%, #3A6073 90%);
+                                                                            background: -o-linear-gradient(90deg, #16222A 10%, #3A6073 90%);
+                                                                            background: linear-gradient(90deg, #16222A 10%, #3A6073 90%);
+                                                                            font-family: 'Raleway', sans-serif;
+                                                                            }*/
+
+
+
     .filterable {
         margin-top: 15px;
     }
@@ -60,11 +86,15 @@
                 color: #333;
             }
     /*body {
-                                    background-color: #6D5959;
-                                }
-                                    body * {
-                                        font-family: 'Montserrat' sans-serif;
-                                    }*/
+                                background-color: #6D5959;
+                            }
+
+                                body * {
+                                    font-family: 'Montserrat' sans-serif;
+                                }*/
+
+
+
     .mat-label {
         display: block;
         font-size: 16px;
@@ -243,6 +273,57 @@
     .slick-arrow.slick-hidden {
         display: none;
     }
+
+
+
+
+    /* FontAwesome for working BootSnippet :> */
+
+
+    .container {
+        padding-top: 50px;
+    }
+
+    #messagebox {
+        border: solid 1px #cecece;
+        min-height: 100px;
+        color: #4B515D;
+    }
+
+        #messagebox.success {
+            border: solid 1px #00C851;
+            border-left: solid 4px #00C851;
+        }
+
+        #messagebox.fail {
+            border: solid 1px #ff4444;
+            border-left: solid 4px #ff4444;
+        }
+
+        #messagebox.warning {
+            border: solid 1px #ffbb33;
+            border-left: solid 4px #ffbb33;
+        }
+
+    #messagebox-icon {
+        padding: 1em;
+    }
+
+    #messagebox-detail-link {
+        margin-left: 1em;
+        margin-right: 1em;
+        position: relative;
+        right: 0;
+    }
+
+    #messagebox-header {
+        padding-left: 0.6em;
+    }
+
+    #expanded-status {
+        border: solid 1px black;
+    }
+
 </style>
 <script>
     $(document).ready(function () {
@@ -317,20 +398,21 @@
                 $table.find('tbody').prepend($('<tr class="no-result text-center"><td colspan="' + $table.find('.filters th').length + '">No result found</td></tr>'));
             }
         });
+
         $("#myDialog").dialog({
             autoOpen: false,
             modal: true,
             height: 700,
-            width: 600,
+            width: 800,
             scroll: true,
             title: "Add New Student",
             show: {
                 effect: "Fade",
-                duration: 1000
+                duration: 500
             },
             hide: {
                 effect: "Fade",
-                duration: 1000
+                duration: 500
             },
             buttons: {
                 'Submit': function () {
@@ -345,10 +427,12 @@
                 //}
             }
         });
+
         //Open the dialog box when the button is clicked.
         $('#clickMe').click(function () {
             $("#myDialog").dialog("open");
         });
+
         $(".mat-input").focus(function () {
             $(this).parent().addClass("is-active is-completed");
         });
@@ -357,34 +441,61 @@
                 $(this).parent().removeClass("is-completed");
             $(this).parent().removeClass("is-active");
         });
+
         //$("#btnOffer").click(function (e) {
         //    e.preventDefault();
         //    window.location.href = "File/functionalsample.pdf";
         //});
         $('.btnOffer').click(function (e) {
             e.preventDefault();  //stop the browser from following
-            //window.location.href = 'File/functionalsample.pdf';
+
             window.open("File/functionalsample.pdf", "_blank");
         });
     });
+
 </script>
 <div class="container-fluid">
     <div class="row">
         <div class="container">
-
+            
             <h2>College Partners</h2>
-            <hr />
+             <hr />
             <section class="customer-logos slider">
                 <div class="slide" style="border-radius:10px"><img src="https://image.freepik.com/free-vector/luxury-letter-e-logo-design_1017-8903.jpg"></div>
-
+                
+                <div class="slide"><img src="https://image.freepik.com/free-vector/3d-box-logo_1103-876.jpg"></div>
+                <div class="slide"><img src="https://image.freepik.com/free-vector/blue-tech-logo_1103-822.jpg"></div>
+                <div class="slide"><img src="https://image.freepik.com/free-vector/colors-curl-logo-template_23-2147536125.jpg"></div>
+                <div class="slide"><img src="https://image.freepik.com/free-vector/abstract-cross-logo_23-2147536124.jpg"></div>
+                <div class="slide"><img src="https://image.freepik.com/free-vector/football-logo-background_1195-244.jpg"></div>
+                <div class="slide"><img src="https://image.freepik.com/free-vector/background-of-spots-halftone_1035-3847.jpg"></div>                 
+                <div class="slide" style="border-radius:10px"><img src="https://image.freepik.com/free-vector/luxury-letter-e-logo-design_1017-8903.jpg"></div>
+                
                 <div class="slide"><img src="https://image.freepik.com/free-vector/3d-box-logo_1103-876.jpg"></div>
                 <div class="slide"><img src="https://image.freepik.com/free-vector/blue-tech-logo_1103-822.jpg"></div>
                 <div class="slide"><img src="https://image.freepik.com/free-vector/colors-curl-logo-template_23-2147536125.jpg"></div>
                 <div class="slide"><img src="https://image.freepik.com/free-vector/abstract-cross-logo_23-2147536124.jpg"></div>
                 <div class="slide"><img src="https://image.freepik.com/free-vector/football-logo-background_1195-244.jpg"></div>
                 <div class="slide"><img src="https://image.freepik.com/free-vector/background-of-spots-halftone_1035-3847.jpg"></div>
+                 
+            </section>
+        </div>
+    </div>
+   @* <hr />
+    <div class="row">
+        <div class="container">
+            <hr />
+            <h2>Shortlisted Students</h2>
+            <hr />
+            <section class="customer-logos slider">                
+                 
                 <div class="slide" style="border-radius:10px"><img src="https://image.freepik.com/free-vector/luxury-letter-e-logo-design_1017-8903.jpg"></div>
-
+                <div class="slide"><img src="https://image.freepik.com/free-vector/3d-box-logo_1103-876.jpg"></div>
+                <div class="slide"><img src="https://image.freepik.com/free-vector/blue-tech-logo_1103-822.jpg"></div>
+                <div class="slide"><img src="https://image.freepik.com/free-vector/colors-curl-logo-template_23-2147536125.jpg"></div>
+                <div class="slide"><img src="https://image.freepik.com/free-vector/abstract-cross-logo_23-2147536124.jpg"></div>
+                <div class="slide"><img src="https://image.freepik.com/free-vector/football-logo-background_1195-244.jpg"></div>
+                <div class="slide"><img src="https://image.freepik.com/free-vector/background-of-spots-halftone_1035-3847.jpg"></div>
                 <div class="slide"><img src="https://image.freepik.com/free-vector/3d-box-logo_1103-876.jpg"></div>
                 <div class="slide"><img src="https://image.freepik.com/free-vector/blue-tech-logo_1103-822.jpg"></div>
                 <div class="slide"><img src="https://image.freepik.com/free-vector/colors-curl-logo-template_23-2147536125.jpg"></div>
@@ -395,108 +506,84 @@
             </section>
         </div>
     </div>
-    @* <hr />
-    <div class="row">
-    <div class="container">
-    <hr />
-    <h2>Shortlisted Students</h2>
-    <hr />
-    <section class="customer-logos slider">
-
-    <div class="slide" style="border-radius:10px"><img src="https://image.freepik.com/free-vector/luxury-letter-e-logo-design_1017-8903.jpg"></div>
-    <div class="slide"><img src="https://image.freepik.com/free-vector/3d-box-logo_1103-876.jpg"></div>
-    <div class="slide"><img src="https://image.freepik.com/free-vector/blue-tech-logo_1103-822.jpg"></div>
-    <div class="slide"><img src="https://image.freepik.com/free-vector/colors-curl-logo-template_23-2147536125.jpg"></div>
-    <div class="slide"><img src="https://image.freepik.com/free-vector/abstract-cross-logo_23-2147536124.jpg"></div>
-    <div class="slide"><img src="https://image.freepik.com/free-vector/football-logo-background_1195-244.jpg"></div>
-    <div class="slide"><img src="https://image.freepik.com/free-vector/background-of-spots-halftone_1035-3847.jpg"></div>
-    <div class="slide"><img src="https://image.freepik.com/free-vector/3d-box-logo_1103-876.jpg"></div>
-    <div class="slide"><img src="https://image.freepik.com/free-vector/blue-tech-logo_1103-822.jpg"></div>
-    <div class="slide"><img src="https://image.freepik.com/free-vector/colors-curl-logo-template_23-2147536125.jpg"></div>
-    <div class="slide"><img src="https://image.freepik.com/free-vector/abstract-cross-logo_23-2147536124.jpg"></div>
-    <div class="slide"><img src="https://image.freepik.com/free-vector/football-logo-background_1195-244.jpg"></div>
-    <div class="slide"><img src="https://image.freepik.com/free-vector/background-of-spots-halftone_1035-3847.jpg"></div>
-    </section>
-    </div>
-    </div>
     <hr />*@
-
+    
     <h2>Students Details</h2>
     <hr />
     <div class="row">
-        <div class="table-responsive filterable" style="height:530px!important;">
-            <div class="panel-heading">
-                <button class="btn btn-primary" id="clickMe">Add Student</button>
-                <div class="pull-right">
-                    <button class="btn btn-default btn-xs btn-filter"><span class="glyphicon glyphicon-filter"></span> Filter</button>
-                </div>
+         <div class="table-responsive filterable" style="height:530px!important;">
+        <div class="panel-heading">
+            <button class="btn btn-primary" id="clickMe">Add Student</button>
+            <div class="pull-right">
+                <button class="btn btn-default btn-xs btn-filter"><span class="glyphicon glyphicon-filter"></span> Filter</button>
             </div>
+        </div>
 
-            <table id="mytable" class="table table-bordred table-striped">
+        <table id="mytable" class="table table-bordred table-striped">
 
-                @* <a href="#" class="btn btn-primary btn-xs pull-right"><b>+</b> Add Student</a>*@
-                <thead>
-                    <tr class="filters">
-                        <th><input type="text" class="form-control" placeholder="Id" disabled></th>
-                        <th><input type="text" class="form-control" placeholder="Name" disabled></th>
-                        <th><input type="text" class="form-control" placeholder="Gender" disabled></th>
-                        <th style="display:none"><input type="text" class="form-control" placeholder="Email" disabled></th>
-                        <th style="display:none"><input type="text" class="form-control" placeholder="DOB" disabled></th>
-                        <th style="display:none"><input type="text" class="form-control" placeholder="DOJ" disabled></th>
-                        <th><input type="text" class="form-control" placeholder="Class" disabled></th>
-                        <th><input type="text" class="form-control" placeholder="Department" disabled></th>
-                        <th><input type="text" class="form-control" placeholder="Phone Number" disabled></th>
-                        <th><input type="text" class="form-control" placeholder="Address" disabled></th>
-                        <th><input type="text" class="form-control" placeholder="Action" disabled readonly></th>
+            @* <a href="#" class="btn btn-primary btn-xs pull-right"><b>+</b> Add Student</a>*@
+            <thead>
+                <tr class="filters">
+                    <th><input type="text" class="form-control" placeholder="Id" disabled></th>
+                    <th><input type="text" class="form-control" placeholder="Name" disabled></th>
+                    <th><input type="text" class="form-control" placeholder="Gender" disabled></th>
+                    <th style="display:none"><input type="text" class="form-control" placeholder="Email" disabled></th>
+                    <th style="display:none"><input type="text" class="form-control" placeholder="DOB" disabled></th>
+                    <th style="display:none"><input type="text" class="form-control" placeholder="DOJ" disabled></th>
+                    <th><input type="text" class="form-control" placeholder="Class" disabled></th>
+                    <th><input type="text" class="form-control" placeholder="Department" disabled></th>
+                    <th><input type="text" class="form-control" placeholder="Phone Number" disabled></th>
+                    <th><input type="text" class="form-control" placeholder="Address" disabled></th>
+                    <th><input type="text" class="form-control" placeholder="Action" disabled readonly></th>
+                </tr>
+
+                @*<th>Delete</th>*@
+            </thead>
+            <tbody>
+                @foreach (var item in Model.students)
+                {
+                    <tr>
+                        <td style="width:60px">
+                            @item.Id
+                        </td>
+                        <td style="width:80px">
+                            @item.FirstName @item.MiddleName @item.LastName
+                        </td>
+                        <td style="width:70px">
+                            @item.Gender
+                        </td>
+                        <td style="display:none;width:1px">
+                            @item.Email
+                        </td>
+                        <td style="display:none;width:1px">
+                            @item.DOJ.ToString("MM/dd/yyyy")
+                        </td>
+                        <td style="display:none;width:1px">
+                            @item.DOB.ToString("MM/dd/yyyy")
+                        </td>
+                        <td style="width:70px">
+                            @item.ClassName
+                        </td>
+                        <td style="width:70px">
+                            @item.Dept
+                        </td>
+                        <td style="width:70px">
+                            @item.PhoneNumber
+                        </td>
+                        <td style="width:100px">
+                            @item.Address
+                        </td>
+                        <td style="width:40px">
+
+                            <a class="btnOffer" href="no-script.html">
+                                <span class="glyphicon glyphicon-download-alt">
+                                </span>
+                            </a>
+
+
+                        </td>
                     </tr>
-
-                    @*<th>Delete</th>*@
-                </thead>
-                <tbody>
-                    @foreach (var item in Model.students)
-                    {
-                        <tr>
-                            <td style="width:60px">
-                                @item.Id
-                            </td>
-                            <td style="width:80px">
-                                @item.FirstName @item.MiddleName @item.LastName
-                            </td>
-                            <td style="width:70px">
-                                @item.Gender
-                            </td>
-                            <td style="display:none;width:1px">
-                                @item.Email
-                            </td>
-                            <td style="display:none;width:1px">
-                                @item.DOJ.ToString("MM/dd/yyyy")
-                            </td>
-                            <td style="display:none;width:1px">
-                                @item.DOB.ToString("MM/dd/yyyy")
-                            </td>
-                            <td style="width:70px">
-                                @item.ClassName
-                            </td>
-                            <td style="width:70px">
-                                @item.Dept
-                            </td>
-                            <td style="width:70px">
-                                @item.PhoneNumber
-                            </td>
-                            <td style="width:100px">
-                                @item.Address
-                            </td>
-                            <td style="width:40px">
-
-                                <a class="btnOffer" href="no-script.html">
-                                    <span class="glyphicon glyphicon-download-alt">
-                                    </span>
-                                </a>
-
-
-                            </td>
-                        </tr>
-                    }
+                }
 
                 </tbody>
 
@@ -508,79 +595,224 @@
 
 
     <div id="myDialog">
-        <div class="modal-body">
-            @*<div class="form-group">
-            <input class="form-control " type="text" placeholder="Mohsin">
-            </div>
-            <div class="form-group">
-            <input class="form-control " type="text" placeholder="Irshad">
-            </div>
-            <div class="form-group">
-            <textarea rows="2" id="studAddress" class="form-control" placeholder="CB 106/107 Street # 11 Wah Cantt Islamabad Pakistan"></textarea>
-            </div>*@
-            <div class="mat-div">
-                <label for="first-name" class="mat-label">First Name</label>
-                <input type="text" class="mat-input" id="first-name">
-            </div>
+        <div class="modal-body row">
+            <div class="col-lg-6">
+                <div class="mat-div">
+                    <label for="first-name" class="mat-label">First Name</label>
+                    <input type="text" class="mat-input" id="first-name">
+                </div>
 
-            <div class="mat-div">
-                <label for="first-name" class="mat-label">Middle Name</label>
-                <input type="text" class="mat-input" id="middle-name">
-            </div>
+                <div class="mat-div">
+                    <label for="first-name" class="mat-label">Middle Name</label>
+                    <input type="text" class="mat-input" id="middle-name">
+                </div>
 
-            <div class="mat-div">
-                <label for="first-name" class="mat-label">Last Name</label>
-                <input type="text" class="mat-input" id="last-name">
-            </div>
+                <div class="mat-div">
+                    <label for="first-name" class="mat-label">Last Name</label>
+                    <input type="text" class="mat-input" id="last-name">
+                </div>
 
-            <div class="mat-div">
-                <select class="mat-input" id="stud-gender">
-                    <option>Male</option>
-                    <option>Female</option>
-                </select>
-            </div>
-            <div class="mat-div">
-                <label for="first-name" class="mat-label">Email</label>
-                <input type="email" class="mat-input" id="email-id">
-            </div>
+                <div class="mat-div">
+                    <select class="mat-input" id="stud-gender">
+                        <option>Male</option>
+                        <option>Female</option>
+                    </select>
+                </div>
+                <div class="mat-div">
+                    <label for="first-name" class="mat-label">Email</label>
+                    <input type="email" class="mat-input" id="email-id">
+                </div>
 
-            <div class="mat-div">
-                <label for="address" class="mat-label">Address</label>
-                <input type="text" class="mat-input" id="stud-address">
+                <div class="mat-div">
+                    <label for="address" class="mat-label">Address</label>
+                    <input type="text" class="mat-input" id="stud-address">
+                </div>
+
             </div>
-            <div class="mat-div">
-                <label for="address" class="mat-label">Date of birth</label>
-                <input type="date" class="mat-input" id="stud-dataofbirth">
-            </div>
-            <div class="mat-div">
-                <label for="address" class="mat-label">Date of join</label>
-                <input type="date" class="mat-input" id="stud-dateofjoin">
-            </div>
-            <div class="mat-div">
-                <select class="mat-input" id="stud-dept">
-                    <option>Information Technology</option>
-                    <option>Science</option>
-                    <option>Nural Network</option>
-                    <option>Mining</option>
-                </select>
-            </div>
-            <div class="mat-div">
-                <select class="mat-input" id="stud-dept">
-                    <option>MCA</option>
-                    <option>MSC</option>
-                    <option>Data Mining</option>
-                    <option>CCNA Network Programming</option>
-                </select>
-            </div>
-            <div class="mat-div">
-                <label for="address" class="mat-label">Phone Number</label>
-                <input type="number" class="mat-input" id="stud-phonenumber">
-            </div>
-            <div class="mat-div">
-                <label for="address" class="mat-label">Percentage</label>
-                <input type="number" class="mat-input" id="stud-percentage">
+            <div class="col-lg-6">
+                <div class="mat-div">
+                    <label for="address" class="mat-label">Date of birth</label>
+                    <input type="date" class="mat-input" id="stud-dataofbirth">
+                </div>
+                <div class="mat-div">
+                    <label for="address" class="mat-label">Date of join</label>
+                    <input type="date" class="mat-input" id="stud-dateofjoin">
+                </div>
+                <div class="mat-div">
+                    <select class="mat-input" id="stud-dept">
+                        <option>Information Technology</option>
+                        <option>Science</option>
+                        <option>Nural Network</option>
+                        <option>Mining</option>
+                    </select>
+                </div>
+                <div class="mat-div">
+                    <select class="mat-input" id="stud-class">
+                        <option>MCA</option>
+                        <option>MSC</option>
+                        <option>Data Mining</option>
+                        <option>CCNA Network Programming</option>
+                    </select>
+                </div>
+                <div class="mat-div">
+                    <label for="address" class="mat-label">Phone Number</label>
+                    <input type="number" class="mat-input" id="stud-phonenumber">
+                </div>
+                <div class="mat-div">
+                    <label for="address" class="mat-label">Percentage</label>
+                    <input type="number" class="mat-input" id="stud-percentage">
+                </div>
             </div>
         </div>
     </div>
+    <div id="myDialogStatus">
+        <div class="row">
 
+            <div class="col-md-12 success" id="messagebox">
+                <div class="row">
+                    <div class="col-md-2" id="messagebox-icon">
+                        <span class="fa fa-2x fa-check text-success"></span>
+                    </div>
+                    <div class="col-md-10">
+                        <div class="row h5" id="messagebox-header">Process Completed</div>
+                        <div class="row">
+                            <div class="col-md-1">
+                                <span class="fa fa-check-circle text-success"></span>
+                            </div>
+                            <div class="col-md-10">
+                                Round 1 Apptitude   done
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-1">
+                                <span class="fa fa-check-circle text-success"></span>
+                            </div>
+                            <div class="col-md-10">
+                                Round 2 Technical 2  done
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-1">
+                                <span class="fa fa-check-circle text-success"></span>
+                            </div>
+                            <div class="col-md-10">
+                                Round 3 Technical Practical  done
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-1">
+                                <span class="fa fa-check-circle text-success"></span>
+                            </div>
+                            <div class="col-md-10">
+                                Round 4 Technical Manager  done
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-1">
+                                <span class="fa fa-check-circle text-success"></span>
+                            </div>
+                            <div class="col-md-10">
+                                Round 5 HR  done
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-1">
+                                <span class="fa fa-check-circle text-success"></span>
+                            </div>
+                            <div class="col-md-10">
+                                Offer leased by employers
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="pull-right" id="messagebox-detail-link">
+                        <a href="#">More Information</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        @*  <div class="row" style="margin-top: 5em;">
+
+        <div class="col-md-12 fail" id="messagebox">
+        <div class="row">
+        <div class="col-md-2" id="messagebox-icon">
+        <span class="fa fa-2x fa-times text-danger"></span>
+        </div>
+        <div class="col-md-10">
+        <div class="row h5" id="messagebox-header">Process Failed to Complete</div>
+        <div class="row">
+        <div class="col-md-1">
+        <span class="fa fa-times-circle text-danger"></span>
+        </div>
+        <div class="col-md-10">
+        Item 1  done
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-md-1">
+        <span class="fa fa-times-circle text-danger"></span>
+        </div>
+        <div class="col-md-10">
+        Item 1  done
+        </div>
+        </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="pull-right" id="messagebox-detail-link">
+        <a href="#">More Information</a>
+        </div>
+        </div>
+        </div>
+
+        </div>
+
+        <div class="row" style="margin-top: 5em;">
+
+        <div class="col-md-12 warning" id="messagebox">
+        <div class="row">
+        <div class="col-md-2" id="messagebox-icon">
+        <span class="fa fa-2x fa-exclamation-triangle text-warning"></span>
+        </div>
+        <div class="col-md-10">
+        <div class="row h5" id="messagebox-header">
+        Process Completed with Errors
+        </div>
+        <div class="row">
+        <div class="col-md-1">
+        <span class="fa fa-check-circle text-success"></span>
+        </div>
+        <div class="col-md-10">
+        Item 1  done
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-md-1">
+        <span class="fa fa-times-circle text-danger"></span>
+        </div>
+        <div class="col-md-10">
+        Item 1  done
+        </div>
+        </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="pull-right" id="messagebox-detail-link">
+        <a href="#">More Information</a>
+        </div>
+        </div>
+        </div>
+
+        </div>*@
+    </div>
+    
 </div>
+
+
+
+
+
+

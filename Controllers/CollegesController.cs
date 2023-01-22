@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+//using Newtonsoft.Json.Serialization;
 
 namespace Placement.Portal.Skillup.Controllers
 {
@@ -33,14 +34,44 @@ namespace Placement.Portal.Skillup.Controllers
             ViewBag.UserName = username;
 
             CollegeDetails _collegeDetails = new CollegeDetails();
-            _collegeDetails.collegeMaster = new CollegeMaster();
+            _collegeDetails.collegeMaster = _studRepo.GetCollegeById();
             _collegeDetails.students = _studRepo.GetStudents().ToList();
-            //ViewBag.CollegeName = "";
+            ViewBag.CollegeName = _studRepo.GetCollegeById().Name;
 
-            return View(_collegeDetails);     
-             
+            return View(_collegeDetails);
+
         }
-        
+        [HttpPost]
+        public JsonResult AjaxStudentPostCall(string FirstName, string MiddleName, string LastName,
+            string Gender, string Email, string DOB, string DOJ, string Dept, string ClassName,
+            string Address, string PhoneNumber, string Percentage)
+        {
+            var stud = new Students()
+            {
+                FirstName = FirstName,
+                MiddleName = MiddleName,
+                LastName = LastName,
+                Address = Address,
+                Email = Email,
+                ClassName = ClassName,
+                Dept = Dept,
+                DOB = Convert.ToDateTime(DOB),
+                DOJ = Convert.ToDateTime(DOJ),
+                Gender = Convert.ToChar(Gender),
+                Percentage = Convert.ToDecimal(Percentage),
+                PhoneNumber = Convert.ToInt64(PhoneNumber),
+                Age=0,
+                CreatedBy=0,
+                IsActive=true,
+                Status="",
+                CollegeId = 0,
+                CreatedAt = DateTime.Now
+            };
+
+            bool retVal = _studRepo.AddStudents(stud);
+
+            return Json(retVal);
+        }
         // GET: CollegeDashboard/Details/5
         public ActionResult Details(int id)
         {
@@ -78,7 +109,7 @@ namespace Placement.Portal.Skillup.Controllers
 
                 var allUsers = await _unitOfWork.UserRepository.GetAllUser();
 
-                if(allUsers.Any(x=>x.CollegeId == Convert.ToInt16(model.CollegeId)))
+                if (allUsers.Any(x => x.CollegeId == Convert.ToInt16(model.CollegeId)))
                 {
                     ModelState.AddModelError("CollegeSelectionError", "Selected college is already registered. Please contact administrator.");
                     return View(GetCollegeRegisterViewModel(true));
