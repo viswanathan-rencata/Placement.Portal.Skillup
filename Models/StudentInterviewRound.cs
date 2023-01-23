@@ -11,16 +11,22 @@ namespace Placement.Portal.Skillup.Models
         [Column("StudentsInterViewScheduleDetails")]
         public int StudentsInterViewScheduleDetails { get; set; }
 
+        [Column("StudentId")]
+        public long StudentId { get; set; }
+
         [Column("Feedback")]
         public string Feedback { get; set; }
 
         [Column("RoundNo")]
-        public int RoundNo { get; set; }
+        public int? RoundNo { get; set; }
+
+        [Column("Status")]
+        public Int32? Status { get; set; }
 
         [Column("CreateAt")]
-        public int CreateAt { get; set; }
+        public int? CreateAt { get; set; }
 
         [Column("CreatedBy")]
-        public int CreatedBy { get; set; }
+        public int? CreatedBy { get; set; }
     }
 }

@@ -7,5 +7,12 @@
             Company = 1,
             College = 2,
         }
+
+        public enum InterviewStatus
+        {
+            Selected = 1,
+            Inprogress = 2,
+            Rejected = 3,
+        }
     }
 }
