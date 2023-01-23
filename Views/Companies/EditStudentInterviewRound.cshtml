@@ -1,4 +1,42 @@
-﻿
-@*
+﻿@*
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
+
+@model StudentInterviewRoundModel;
+
+<div class="container-fluid ps-md-0">
+    <div class="row g-0">
+        <div class="col-md-12 col-lg-12">
+            <div class="login d-flex align-items-center py-5">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-9 col-lg-8 mx-auto">
+                            <form id="studentsInterviewRoundForm">
+                                @if (Model.IsStatusUpdateSuccess)
+                                {
+                                    <div class="card border-success mb-5">
+                                        <div class="card-body text-success">
+                                            <span class="card-text" asp-validation-for="UpdateSuccess">Updated Successfully.</span>
+                                        </div>
+                                    </div>
+                                }
+                                @Html.HiddenFor(x=>x.StudentId)
+                                @Html.HiddenFor(x=>x.StudentsInterViewScheduleDetailsId)
+                                <div class="form-floating mb-3">
+                                    <textarea type="text" class="form-control" asp-for="FeedBack" placeholder="FeedBack"></textarea>
+                                    <label asp-for="FeedBack">FeedBack</label>
+                                    <span asp-validation-for="FeedBack" class="text-danger"></span>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <select asp-for="StatusId" asp-items="@Model.Status" class="form-control"></select>
+                                    <label asp-for="StatusId">Status</label>
+                                    <span asp-validation-for="Status" class="text-danger"></span>
+                                </div>                                
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

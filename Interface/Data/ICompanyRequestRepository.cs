@@ -9,5 +9,6 @@ namespace Placement.Portal.Skillup.Interface.Data
         //Task EditCompanyRequestAsync(CompanyRequest companyRequest);
         //Task DeleteCompanyRequestAsync(CompanyRequest companyRequest);
         List<CandidatesGrid> GetInterviewCandidatesList(int companyId, int collegeId);
+        void AddOrUpdateStatus(StudentInterviewRound obj);
     }
 }

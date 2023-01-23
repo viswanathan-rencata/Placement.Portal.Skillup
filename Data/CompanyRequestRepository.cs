@@ -6,6 +6,7 @@ using Placement.Portal.Skillup.Models;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Linq;
+using static Placement.Portal.Skillup.Models.Enum;
 
 namespace Placement.Portal.Skillup.Data
 {
@@ -74,6 +75,31 @@ namespace Placement.Portal.Skillup.Data
             }
 
             return List;
+        }
+
+        public void AddOrUpdateStatus(StudentInterviewRound obj)
+        {
+            var status = _dbContext.StudentInterviewRound.Where(x => x.StudentsInterViewScheduleDetails == obj.StudentsInterViewScheduleDetails
+            && x.StudentId == obj.StudentId).FirstOrDefault();
+            if(status != null)
+            {
+                status.Feedback = obj.Feedback;
+                status.Status= obj.Status;
+                status.StudentId = obj.StudentId;
+            }
+            else
+            {
+                _dbContext.StudentInterviewRound.Add(obj);
+            }
+
+            var Student = _dbContext.Students.FirstOrDefault(x=>x.Id == obj.StudentId);
+            if(Student != null)
+            {
+                var enumDisplayStatus = (InterviewStatus)obj.Status;
+                string statusValue = enumDisplayStatus.ToString();
+                Student.Status = statusValue;
+                _dbContext.Students.Update(Student);
+            }
         }
 
        
