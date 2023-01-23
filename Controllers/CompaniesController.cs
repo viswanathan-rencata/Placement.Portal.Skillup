@@ -29,7 +29,7 @@ namespace Placement.Portal.Skillup.Controllers
             var customClaim = HttpContext.User.FindFirst("CompanyOrCollege");
 
             ViewBag.UserName = username;
-            List<CompanyRequest> cr = await _unitOfWork.CompanyRequestRepository.GetCompanyRequestAsync(Convert.ToInt16(HttpContext.User.FindFirst("CompanyId").Value.ToString())); 
+            List<CompanyRequest> cr = _unitOfWork.CompanyRequestRepository.GetCompanyRequest(Convert.ToInt16(HttpContext.User.FindFirst("CompanyId").Value.ToString())); 
             return View(cr);
         }
         
@@ -47,13 +47,7 @@ namespace Placement.Portal.Skillup.Controllers
 
         public IActionResult ViewRequests()
         {
-            return View("Index");
-
-            //AppDBContext dBContext = new AppDBContext();
-
-            //var data = dBContext.CompanyRequest;
-            
-            //return View (data.ToList());
+            return View("CompanyRequest");
         }
 
         [HttpPost]
@@ -211,13 +205,13 @@ namespace Placement.Portal.Skillup.Controllers
             }
 
             if (ModelState.IsValid)
-            {
-                
+            {                
                 var companyReq = new CompanyRequest
                 {
-                    CollegeName = "Southwest Wisconsin Technical College",
+                    CompanyId = Convert.ToInt16(HttpContext.User.FindFirst("CompanyId").Value),
+                    CollegeId = Convert.ToInt16(model.CollegeName),
                     RequestDate = model.RequestDate,
-                    Department = "Electronics",
+                    Department = model.Department,
                     CoreAreas = model.CoreAreas,
                     Percentage = model.CGPAPercent,
                     Comments = model.Comments
@@ -225,7 +219,7 @@ namespace Placement.Portal.Skillup.Controllers
 
                 await _unitOfWork.CompanyRequestRepository.AddCompanyRequestAsync(companyReq);
 
-                if (await _unitOfWork.Complete()) return View(GetCompanyRequestViewModel());
+                if (await _unitOfWork.Complete()) return RedirectToAction("Index","Companies");
                 else
                 {
                     return View(GetCompanyRequestViewModel());

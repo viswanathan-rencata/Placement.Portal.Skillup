@@ -35,12 +35,14 @@ namespace Placement.Portal.Skillup.Controllers
         {
             var username = HttpContext.User.Identity.Name;
             var customClaim = HttpContext.User.FindFirst("CompanyOrCollege");
+            var colId = HttpContext.User.FindFirst("CollegeId");
             ViewBag.UserName = username;
 
             CollegeDetails _collegeDetails = new CollegeDetails();
-            _collegeDetails.collegeMaster = _studRepo.GetCollegeById();
-            _collegeDetails.students = _studRepo.GetStudents().ToList();
-            ViewBag.CollegeName = _studRepo.GetCollegeById().Name;
+            _collegeDetails.collegeMaster = _studRepo.GetCollegeById(Convert.ToInt32(colId.Value));
+            _collegeDetails.students = _studRepo.GetStudents(Convert.ToInt32(colId.Value)).ToList();
+            _collegeDetails.companyRequest = _studRepo.GetCompanyRequestByCollegeId(Convert.ToInt32(colId.Value));
+            ViewBag.CollegeName = _collegeDetails.collegeMaster.Name; // _studRepo.GetCollegeById(colId).Name;
 
             return View(_collegeDetails);
 
@@ -50,6 +52,8 @@ namespace Placement.Portal.Skillup.Controllers
             string Gender, string Email, string DOB, string DOJ, string Dept, string ClassName,
             string Address, string PhoneNumber, string Percentage)
         {
+            var colId = HttpContext.User.FindFirst("CollegeId");
+
             var stud = new Students()
             {
                 FirstName = FirstName,
@@ -68,7 +72,7 @@ namespace Placement.Portal.Skillup.Controllers
                 CreatedBy = 0,
                 IsActive = true,
                 Status = "",
-                CollegeId = 0,
+                CollegeId = Convert.ToInt32(colId.Value),
                 CreatedAt = DateTime.Now
             };
 
@@ -190,7 +194,8 @@ namespace Placement.Portal.Skillup.Controllers
                 {
                     new Claim(ClaimTypes.Name, user.UserName),
                     new Claim(ClaimTypes.Email, user.Email),
-                    new Claim("CompanyOrCollege", user.CompanyOrCollege.ToString())
+                    new Claim("CompanyOrCollege", user.CompanyOrCollege.ToString()),
+                    new Claim("CollegeId", user.CollegeId.ToString())
                 };
 
                 var claimsIdentity = new ClaimsIdentity(

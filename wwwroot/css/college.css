@@ -40,12 +40,12 @@ button.accept-policy {
     line-height: inherit;
 }
 
-.footer {
-    
+.footer {    
     bottom: 0;
     width: 100%;
     white-space: nowrap;
     line-height: 60px;
+    text-align:center;
 }
 
 .btn-logout, .btn-profile {

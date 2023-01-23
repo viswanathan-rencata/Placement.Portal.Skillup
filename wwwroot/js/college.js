@@ -5,6 +5,7 @@
     });
 
     function getUserProfile() {
+        debugger;
         $.ajax({
             type: "GET",
             url: "/UserProfile/Edit",

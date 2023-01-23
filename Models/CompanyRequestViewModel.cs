@@ -8,7 +8,9 @@ namespace Placement.Portal.Skillup.Models
     {
         public string CompanyName { get; set; }
 
-        [Required(ErrorMessage = "College is required.")]
+        public int CollegeId { get; set; }
+
+		[Required(ErrorMessage = "College is required.")]
         public string CollegeName { get; set; }
 
         [Required(ErrorMessage = "Date is required.")]
