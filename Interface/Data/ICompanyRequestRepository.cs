@@ -8,5 +8,6 @@ namespace Placement.Portal.Skillup.Interface.Data
         Task AddCompanyRequestAsync(CompanyRequest companyRequest);        
         //Task EditCompanyRequestAsync(CompanyRequest companyRequest);
         //Task DeleteCompanyRequestAsync(CompanyRequest companyRequest);
+        List<CandidatesGrid> GetInterviewCandidatesList(int companyId, int collegeId);
     }
 }
