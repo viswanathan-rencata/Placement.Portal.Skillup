@@ -10,9 +10,11 @@
 
         public enum InterviewStatus
         {
-            Selected = 1,
-            Inprogress = 2,
-            Rejected = 3,
+            Round1 = 1,
+            Round2 = 2,
+            Round3 = 3,
+            Selected = 4,
+            Rejected = 5,
         }
     }
 }
