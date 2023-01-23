@@ -1,4 +1,5 @@
-﻿using Placement.Portal.Skillup.Models;
+﻿using Placement.Portal.Skillup.Controllers;
+using Placement.Portal.Skillup.Models;
 
 namespace Placement.Portal.Skillup.Interface
 {
@@ -10,7 +11,10 @@ namespace Placement.Portal.Skillup.Interface
         public bool AddStudents(Students Student);
         public CollegeMaster GetCollegeById(int colegeId);
         public List<CompanyRequest> GetCompanyRequestByCollegeId(int colegeId);
+        public string ProcessTemplate(string data, int studId, int collegeId);
+        public bool AddStudentsInterViewScheduleDetails(List<StudentsInterViewScheduleDetails> student);
+        public List<StudentInterviewRound> GetStudentInterviewRound(int colegeId,int studId);
 
-
+        
     }
 }

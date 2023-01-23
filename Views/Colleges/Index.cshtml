@@ -4,17 +4,34 @@
 @model Placement.Portal.Skillup.Models.CollegeDetails
 
 
+
 <script src="~/lib/jqueryui/jquery-ui.min.js"></script>
 @*<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">*@
+
+
+
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
 
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css"  />
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" />
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.js"></script>
 
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <style>
+    .ui-dialog-titlebar-close {
+        background-image: url('img/png-transparent-computer-icons-close-button-trademark-logo-sign-thumbnail.png');
+    }
+
+    .ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset > button {
+        background-color: dodgerblue;
+        color: white;
+        border-color: dodgerblue;
+        width: 125px;
+        height: 50px;
+        border-radius: 5px;
+    }
+
     .container {
         padding-top: 0px !important;
     }
@@ -151,15 +168,15 @@
         transform: translateY(0);
     }
 
-   /* button {
-        background-color: #93E1D8;
-        border: none;
-        display: block;
-        margin: 35px auto;
-        padding: 15px 30px;
-        border-radius: 10px;
-        cursor: pointer;
-    }*/
+    /* button {
+                                            background-color: #93E1D8;
+                                            border: none;
+                                            display: block;
+                                            margin: 35px auto;
+                                            padding: 15px 30px;
+                                            border-radius: 10px;
+                                            cursor: pointer;
+                                        }*/
     /* Animation*/
     h2 {
         text-align: center;
@@ -339,8 +356,12 @@
         font-family: 'Raleway', sans-serif;
     }
 </style>
+
 <script>
+
+    var studentsDropdowns = [];
     $(document).ready(function () {
+
         $('.customer-logos').slick({
             slidesToShow: 6,
             slidesToScroll: 1,
@@ -474,6 +495,64 @@
                         return false;
                     }
 
+                     if (emailid == "") {
+                        swal({
+                            title: "Email required!",
+                            //text: "OK",
+                            icon: "warning",
+                            button: "OK",
+                        });
+                        //swal("Good job!", "You clicked the button!", "success")
+                        return false;
+                    }
+
+
+                    if(studpercentage == "")      {
+                        swal({
+                            title: "Percentage required!",
+                            //text: "OK",
+                            icon: "warning",
+                            button: "OK",
+                        });
+                        //swal("Good job!", "You clicked the button!", "success")
+                        return false;
+                    }
+
+                    if (studdataofbirth == "") {
+                        swal({
+                            title: "Date of birth required!",
+                            //text: "OK",
+                            icon: "warning",
+                            button: "OK",
+                        });
+                        //swal("Good job!", "You clicked the button!", "success")
+                        return false;
+                    }
+
+                    if (studdateofjoin == "") {
+                        swal({
+                            title: "Date of join required!",
+                            //text: "OK",
+                            icon: "warning",
+                            button: "OK",
+                        });
+                        //swal("Good job!", "You clicked the button!", "success")
+                        return false;
+                    }
+
+                    if (studaddress == "") {
+                        swal({
+                            title: "Address required!",
+                            //text: "OK",
+                            icon: "warning",
+                            button: "OK",
+                        });
+                        //swal("Good job!", "You clicked the button!", "success")
+                        return false;
+                    }
+
+                    
+
 
 
 
@@ -535,15 +614,71 @@
             }
         });
 
+        $("#myDialogApproveOrReject").dialog({
+            autoOpen: false,
+            modal: true,
+            height: 400,
+            width: 700,
+            scroll: true,
+            title: "Approve Interview",
+            show: {
+                effect: "Fade",
+                duration: 500
+            },
+            hide: {
+                effect: "Fade",
+                duration: 500
+            },
+            buttons: {
+                'Approve': function () {
+                    var ids = $('#studId').val();
+
+                    var studentDetails = {
+                        'Ids': ids,
+                        'companyId': $('#collegeId').val(),
+                        'companyRequestId': $('#requestId').val()
+                    };
+
+                    console.log(studentDetails);
+
+                    $.ajax({
+                        type: "POST",
+                        //url: "/Home/AjaxMethod",
+                        url: "/Colleges/AjaxStudentIds",
+                        data: studentDetails,
+                        success: function (response) {
+
+                            swal({
+                                title: "Good job!",
+                                text: "Approve!",
+                                icon: "Success",
+                                button: "OK",
+                            });
+                            window.location.reload();
+
+                        },
+                        failure: function (response) {
+                            //alert(response.responseText);
+                        },
+                        error: function (response) {
+                            //alert(response.responseText);
+                        }
+                    });
+
+                }
+
+            }
+        });
+
+
         //Open the dialog box when the button is clicked.
         $('#clickMe').click(function () {
             $("#myDialog").dialog("open");
         });
 
-        $('.ststuscls').click(function () {
 
-            $("#myDialogStatus").dialog("open");
-        });
+
+
 
         $(".mat-input").focus(function () {
             $(this).parent().addClass("is-active is-completed");
@@ -569,67 +704,195 @@
             }).show();
         });
         $("#tabs").tabs();
-        $('.generatePDF').click(function () {
-            $.ajax({
-                type: "POST",
-                url: "/Colleges/GeneratePDF",
-                data: '',
-                contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-                dataType: "html",
-                success: function (response) {
-                    debugger;
-                    openNewTab(JSON.parse(response).data);
+
+        $("#studId")
+            // don't navigate away from the field on tab when selecting an item
+            .on("keydown", function (event) {
+                if (event.keyCode === $.ui.keyCode.TAB &&
+                    $(this).autocomplete("instance").menu.active) {
+                    event.preventDefault();
+                }
+            })
+            .autocomplete({
+                minLength: 0,
+                source: function (request, response) {
+                    // delegate back to autocomplete, but extract the last term
+                    response($.ui.autocomplete.filter(
+                        studentsDropdowns, extractLast(request.term)));
                 },
-                failure: function (response) {
-                    alert(response.responseText);
+                focus: function () {
+                    // prevent value inserted on focus
+                    return false;
                 },
-                error: function (response) {
-                    alert(response.responseText);
+                select: function (event, ui) {
+                    var terms = split(this.value);
+                    // remove the current input
+                    terms.pop();
+                    // add the selected item
+                    terms.push(ui.item.value);
+                    // add placeholder to get the comma-and-space at the end
+                    terms.push("");
+                    this.value = terms.join(", ");
+                    return false;
                 }
             });
+
+
+    });
+    function generatePDF(obj) {
+        var studData = {
+            'data': "",
+            'studId': obj,
+        };
+        $.ajax({
+            type: "POST",
+            url: "/Colleges/GeneratePDF",
+            data: studData,
+            contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+            dataType: "html",
+            success: function (response) {
+
+                openNewTab(JSON.parse(response).data);
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+    function split(val) {
+        return val.split(/,\s*/);
+    }
+    function extractLast(term) {
+        return split(term).pop();
+    }
+    function openNewTab(response) {
+        var contentType = 'application/pdf';
+        var sliceSize = 512;
+        var byteCharacters = atob(response);
+        var byteArrays = [];
+        for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+            var slice = byteCharacters.slice(offset, offset + sliceSize);
+            var byteNumbers = new Array(slice.length);
+            for (var i = 0; i < slice.length; i++) {
+                byteNumbers[i] = slice.charCodeAt(i);
+            }
+            var byteArray = new Uint8Array(byteNumbers);
+            byteArrays.push(byteArray);
+        }
+        var blob = new Blob(byteArrays, { type: contentType });
+        blob = b64toBlob(response, contentType);
+        var blobUrl = URL.createObjectURL(blob);
+        window.open(blobUrl);
+    }
+    function b64toBlob(b64Data, contentType = '', sliceSize = 512) {
+        const byteCharacters = atob(b64Data);
+        const byteArrays = [];
+        for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+            const slice = byteCharacters.slice(offset, offset + sliceSize);
+            const byteNumbers = new Array(slice.length);
+            for (let i = 0; i < slice.length; i++) {
+                byteNumbers[i] = slice.charCodeAt(i);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+            byteArrays.push(byteArray);
+        }
+        const blob = new Blob(byteArrays, { type: contentType });
+        return blob;
+    }
+    function GetApproveOrReject(obj, id) {
+
+        studentsDropdowns = [];
+
+        var studData = {
+            'data': "",
+        };
+
+        $('#requestId').val(id);
+        $('#collegeId').val(obj);
+
+        $.ajax({
+            type: "POST",
+            //url: "/Home/AjaxMethod",
+            url: "/Colleges/AjaxStudents",
+            data: studData,
+            success: function (response) {
+                debugger;
+                $.each(response.data.studentsDropdown, function (index, element) {
+                    studentsDropdowns.push(element.name);
+                });
+
+                console.log(studentsDropdowns);
+            },
+            failure: function (response) {
+                //alert(response.responseText);
+            },
+            error: function (response) {
+                //alert(response.responseText);
+            }
         });
 
-        function openNewTab(response) {
-            var contentType = 'application/pdf';
-            var sliceSize = 512;
-            var byteCharacters = atob(response);
-            var byteArrays = [];
-            for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-                var slice = byteCharacters.slice(offset, offset + sliceSize);
-                var byteNumbers = new Array(slice.length);
-                for (var i = 0; i < slice.length; i++) {
-                    byteNumbers[i] = slice.charCodeAt(i);
-                }
-                var byteArray = new Uint8Array(byteNumbers);
-                byteArrays.push(byteArray);
-            }
-            var blob = new Blob(byteArrays, { type: contentType });
-            blob = b64toBlob(response, contentType);
-            var blobUrl = URL.createObjectURL(blob);
-            window.open(blobUrl);
-        }
-        function b64toBlob(b64Data, contentType = '', sliceSize = 512) {
-            const byteCharacters = atob(b64Data);
-            const byteArrays = [];
-            for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-                const slice = byteCharacters.slice(offset, offset + sliceSize);
-                const byteNumbers = new Array(slice.length);
-                for (let i = 0; i < slice.length; i++) {
-                    byteNumbers[i] = slice.charCodeAt(i);
-                }
-                const byteArray = new Uint8Array(byteNumbers);
-                byteArrays.push(byteArray);
-            }
-            const blob = new Blob(byteArrays, { type: contentType });
-            return blob;
-        }
-    });
+        $("#myDialogApproveOrReject").dialog("open");
 
-</script>
-<div class="container-fluid">
-     <br />
-    <div class="container page-header">
+    }
+    function fnststuscls(obj) {
+
+        var studData = {
+            'studId': obj,
+        };
+        var dataStudInter = '';
+        $.ajax({
+            type: "POST",
+            url: "/Colleges/GetStudentStatus",
+            data: studData,
+            contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+            dataType: "html",
+            success: function (response) {
+                debugger;
+                var dataValidation = JSON.parse(response);
+                if (dataValidation.length > 0) {
+                    $.each(dataValidation, function (index, element) {
+                        dataStudInter = dataStudInter + '<div class="row">' +
+                            '<div class="col-md-1" >' +
+                            '<span class="fa fa-check-circle text-success" > </span>' +
+                            '</div>' +
+                            '<div class="col-md-10" > ' + element.feedback + '</div></div>';
+
+                    });
+                } else{
+                    dataStudInter = dataStudInter + '<div class="row">' +
+                        '<div class="col-md-1" >' +
+                        '<span class="fa fa-check-circle text-success" > </span>' +
+                        '</div>' +
+                        '<div class="col-md-10" >In progress</div></div>';
+                } 
+
+                $('#Rounds').empty();
+                $('#Rounds').append(dataStudInter);
+                $("#myDialogStatus").dialog("open");
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
        
+
+
+
+
+
+    }
+</script>
+
+<div class="container-fluid">
+    <br />
+    <div class="container page-header">
+
         <div class="row">
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                 <div class="page-caption">
@@ -650,6 +913,7 @@
                 <h2>Student Details</h2>
                 <input type="hidden" id="collegeId" value="@Model.collegeMaster.ID" />
                 <input type="hidden" id="collegeName" value="@Model.collegeMaster.Name" />
+                <input type="hidden" id="requestId" value="0" />
                 <div class="table-responsive-lg filterable" style="height:700px!important;overflow:scroll;">
                     <div class="pull-right">
                         <button class="btn btn-primary  btn-filter"><span class="glyphicon glyphicon-filter"></span> Filter</button>
@@ -700,7 +964,7 @@
                                         </td>
                                     }
 
-                                    <td style="width:60px" class="alnright">
+                                    <td style="width:50px" class="alnright">
                                         @item.Email
 
                                     </td>
@@ -725,13 +989,13 @@
                                     @if (item.Status == "Selected")
                                     {
                                         <td style="width:100px" class="alnright">
-                                            <label class="statusColorG ststuscls">@item.Status</label>
+                                            <label class="statusColorG ststuscls" onclick="fnststuscls(@item.Id)">@item.Status</label>
                                         </td>
                                     }
                                     else
                                     {
                                         <td style="width:100px" class="alnright">
-                                            <label class="statusColorRed ststuscls">@item.Status</label>
+                                            <label class="statusColorRed ststuscls" onclick="fnststuscls(@item.Id)">@item.Status</label>
                                         </td>
                                     }
 
@@ -739,8 +1003,9 @@
                                     {
                                         <td style="width:40px">
 
-                                            <a class="generatePDF">
-                                                <span style="font-size: 20px;" class="glyphicon glyphicon-download-alt">
+                                            <a class="generatePDF" onclick="generatePDF(@item.Id)">
+
+                                                <span style="cursor:pointer;font-size:30px;color:dodgerblue;" class="fa fa-download">
                                                 </span>
                                             </a>
 
@@ -779,30 +1044,32 @@
                     <div class="searchable-container">
                         @foreach (var item in Model.companyRequest)
                         {
-                            <div class="items col-xs-12 col-sm-6 col-md-6 col-lg-6 clearfix">
+                            <div class="items col-xs-12 col-sm-6 col-md-6 col-lg-6 clearfix" style="cursor:pointer;" onclick="GetApproveOrReject(@item.CompanyId,@item.Id)">
                                 <div class="info-block block-info clearfix">
                                     <div class="square-box pull-left" style="border-radius:10px!important;">
-                                        <span class="glyphicon glyphicon-envelope glyphicon-lg"></span>
+                                        <span class="fa fa-bell" style="font-size:5.333333em!important"></span>
                                     </div>
                                     <h1>@item.CompanyName</h1>
-                                    <h4>Department: @item.Department</h4>
-                                    <h4>Class: @item.CoreAreas</h4>
+                                    <h5>Department: @item.Department</h5>
+                                    <h5>Class: @item.CoreAreas</h5>
 
                                     @if (!string.IsNullOrEmpty(item.RequestDate.ToString()))
                                     {
-                                        <p>Interview Date: @item.RequestDate.ToString()</p>
+                                        <p>Interview Date: @item.RequestDate.ToString("MM/dd/yyyy")</p>
                                     }
                                     else
                                     {
-                                        <p>Interview Date: @item.RequestDate</p>
+                                        <p>Interview Date: @DateTime.Now.ToString("MM/dd/yyyy")</p>
 
                                     }
+                                    <span>By: HR</span>
                                     <span>Phone: 555-555-5555</span>
                                     <span>Email: sample@company.com</span>
-                                    <h4>By: HR </h4>
+
                                 </div>
                             </div>
                         }
+
                     </div>
                 </div>
 
@@ -818,7 +1085,7 @@
         <div class="modal-body row">
             <div class="col-lg-6">
                 <div class="mat-div">
-                    <label for="first-name" class="mat-label">First Name</label>
+                    <label for="first-name" class="mat-label">First Name<span style="color:red">*</span></label>
                     <input type="text" class="mat-input" id="first-name">
                 </div>
 
@@ -828,7 +1095,7 @@
                 </div>
 
                 <div class="mat-div">
-                    <label for="first-name" class="mat-label">Last Name</label>
+                    <label for="first-name" class="mat-label">Last Name <span style="color:red">*</span></label>
                     <input type="text" class="mat-input" id="last-name">
                 </div>
 
@@ -839,23 +1106,23 @@
                     </select>
                 </div>
                 <div class="mat-div">
-                    <label for="first-name" class="mat-label">Email</label>
+                    <label for="first-name" class="mat-label">Email<span style="color:red">*</span></label>
                     <input type="email" class="mat-input" id="email-id">
                 </div>
 
                 <div class="mat-div">
-                    <label for="address" class="mat-label">Address</label>
+                    <label for="address" class="mat-label">Address<span style="color:red">*</span></label>
                     <input type="text" class="mat-input" id="stud-address">
                 </div>
 
             </div>
             <div class="col-lg-6">
                 <div class="mat-div">
-                    <label for="address" class="mat-label">Date of birth</label>
+                    <label for="address" class="mat-label">Date of birth<span style="color:red">*</span></label>
                     <input type="date" class="mat-input" id="stud-dataofbirth">
                 </div>
                 <div class="mat-div">
-                    <label for="address" class="mat-label">Date of join</label>
+                    <label for="address" class="mat-label">Date of join<span style="color:red">*</span></label>
                     <input type="date" class="mat-input" id="stud-dateofjoin">
                 </div>
                 <div class="mat-div">
@@ -884,7 +1151,7 @@
                     <input type="number" class="mat-input" id="stud-phonenumber">
                 </div>
                 <div class="mat-div">
-                    <label for="address" class="mat-label">Percentage</label>
+                    <label for="address" class="mat-label">Percentage<span style="color:red">*</span></label>
                     <input type="number" class="mat-input" id="stud-percentage">
                 </div>
             </div>
@@ -898,55 +1165,9 @@
                     <div class="col-md-2" id="messagebox-icon">
                         <span class="fa fa-2x fa-check text-success"></span>
                     </div>
-                    <div class="col-md-10">
-                        <div class="row h5" id="messagebox-header">Process Completed</div>
-                        <div class="row">
-                            <div class="col-md-1">
-                                <span class="fa fa-check-circle text-success"></span>
-                            </div>
-                            <div class="col-md-10">
-                                Round 1 Apptitude   done
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-1">
-                                <span class="fa fa-check-circle text-success"></span>
-                            </div>
-                            <div class="col-md-10">
-                                Round 2 Technical 2  done
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-1">
-                                <span class="fa fa-check-circle text-success"></span>
-                            </div>
-                            <div class="col-md-10">
-                                Round 3 Technical Practical  done
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-1">
-                                <span class="fa fa-check-circle text-success"></span>
-                            </div>
-                            <div class="col-md-10">
-                                Round 4 Technical Manager  done
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-1">
-                                <span class="fa fa-check-circle text-success"></span>
-                            </div>
-                            <div class="col-md-10">
-                                Round 5 HR  done
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-1">
-                                <span class="fa fa-check-circle text-success"></span>
-                            </div>
-                            <div class="col-md-10">
-                                Offer leased by employers
-                            </div>
+                    <div class="col-md-10" id="interviewProcess">
+                        <div class="row h5" id="messagebox-header">Process Status</div>
+                        <div id="Rounds">
                         </div>
                     </div>
                 </div>
@@ -954,6 +1175,18 @@
                     <div class="pull-right" id="messagebox-detail-link">
                         <a href="#">More Information</a>
                     </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="myDialogApproveOrReject">
+        <div class="modal-body row">
+            <div class="col-lg-12">
+                <div class="mat-div">
+                    <label for="studId" class="mat-label">Student</label>
+                    <input type="text" class="mat-input" id="studId">
                 </div>
             </div>
 

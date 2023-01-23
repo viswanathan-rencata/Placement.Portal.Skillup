@@ -1,4 +1,6 @@
-﻿namespace Placement.Portal.Skillup.Models
+﻿using Placement.Portal.Skillup.Controllers;
+
+namespace Placement.Portal.Skillup.Models
 {
     public class CollegeDetails
     {
@@ -7,6 +9,7 @@
 
         public List<CompanyRequest> companyRequest { get; set; }
 
-
+        public List<StudentsDropdown> studentsDropdown { get; set; }
+        public List<StudentInterviewRound> StudentInterviewRound { get; set; }
     }
 }

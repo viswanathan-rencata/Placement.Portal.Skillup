@@ -42,10 +42,36 @@ namespace Placement.Portal.Skillup.Controllers
             _collegeDetails.collegeMaster = _studRepo.GetCollegeById(Convert.ToInt32(colId.Value));
             _collegeDetails.students = _studRepo.GetStudents(Convert.ToInt32(colId.Value)).ToList();
             _collegeDetails.companyRequest = _studRepo.GetCompanyRequestByCollegeId(Convert.ToInt32(colId.Value));
-            ViewBag.CollegeName = _collegeDetails.collegeMaster.Name; // _studRepo.GetCollegeById(colId).Name;
+            ViewBag.CollegeName = _collegeDetails.collegeMaster.Name; // _studRepo.GetCollegeById(colId).Name;          
+
+
+
 
             return View(_collegeDetails);
 
+        }
+        [HttpPost]
+        public JsonResult AjaxStudents(string data)
+        {
+            CollegeDetails _collegeDetails = new CollegeDetails();
+            var colId = HttpContext.User.FindFirst("CollegeId");
+            var Id = Convert.ToInt32(colId.Value);
+            _collegeDetails.students = _studRepo.GetStudents(Convert.ToInt32(colId.Value)).ToList();
+            List<StudentsDropdown> lstStudentsDropdown = new List<StudentsDropdown>();
+            foreach (var item in _collegeDetails.students)
+            {
+                string middelData = "";
+                if (!string.IsNullOrEmpty(item.MiddleName))
+                {
+                    middelData = item.MiddleName;
+                }
+                StudentsDropdown vStudentsDropdown = new StudentsDropdown();
+                vStudentsDropdown.Id = Convert.ToInt32(item.Id);
+                vStudentsDropdown.Name = item.FirstName + middelData + item.LastName + "|" + item.Id;
+                lstStudentsDropdown.Add(vStudentsDropdown);
+            }
+            _collegeDetails.studentsDropdown = lstStudentsDropdown;
+            return Json(new { data = _collegeDetails });
         }
         [HttpPost]
         public JsonResult AjaxStudentPostCall(string FirstName, string MiddleName, string LastName,
@@ -79,6 +105,52 @@ namespace Placement.Portal.Skillup.Controllers
             bool retVal = _studRepo.AddStudents(stud);
 
             return Json(retVal);
+        }
+        [HttpPost]
+        public JsonResult AjaxStudentIds(string Ids, string companyId, string companyRequestId)
+        {
+            var colId = HttpContext.User.FindFirst("CollegeId");
+
+            List<string> lstIds = new List<string>();
+            List<StudentsInterViewScheduleDetails> studentsInterViewScheduleDetails = new List<StudentsInterViewScheduleDetails>();
+            var vIds = Ids.Split(',');
+
+            foreach (var item in vIds)
+            {
+                if (item.Trim() != "")
+                {
+                    lstIds.Add(item.Split('|')[1]);
+                }
+
+            }
+            var datalst = lstIds.Distinct().ToList();
+
+            foreach (var studid in datalst)
+            {
+                var singleStudentsInterViewScheduleDetails = new StudentsInterViewScheduleDetails()
+                {
+                    CollegeId = Convert.ToInt64(colId.Value),
+                    StudentId = Convert.ToInt64(studid),
+                    CompanyId = Convert.ToInt64(companyId),
+                    CompanyRequestId = Convert.ToInt64(companyRequestId),
+                    CreateAt = DateTime.Now,
+                    CreatedBy = Convert.ToInt32(companyId)
+                };
+
+                studentsInterViewScheduleDetails.Add(singleStudentsInterViewScheduleDetails);
+            }
+            bool retVal = _studRepo.AddStudentsInterViewScheduleDetails(studentsInterViewScheduleDetails);
+            return Json("Approved");
+        }
+
+        [HttpPost]
+        public JsonResult GetStudentStatus(string studId)
+        {
+            List<StudentInterviewRound> lstStudInt = new List<StudentInterviewRound>();
+
+            var colId = HttpContext.User.FindFirst("CollegeId");
+            lstStudInt = _studRepo.GetStudentInterviewRound(Convert.ToInt32(colId.Value), Convert.ToInt32(studId));
+            return Json(lstStudInt);
         }
         // GET: CollegeDashboard/Details/5
         public ActionResult Details(int id)
@@ -223,20 +295,22 @@ namespace Placement.Portal.Skillup.Controllers
         {
             await HttpContext.SignOutAsync();
             return RedirectToAction("Index", "Dashboard");
-        }      
+        }
 
         [HttpPost]
-        public JsonResult GeneratePDF(string data)
+        public JsonResult GeneratePDF(string data, string studId)
         {
+            data = "";
             // instantiate a html to pdf converter object
             HtmlToPdf converter = new HtmlToPdf();
 
             //// set converter options
             converter.Options.PdfPageSize = PdfPageSize.Letter;
             converter.Options.PdfPageOrientation = PdfPageOrientation.Portrait;
-            
+
             data = GetOfferTemplate();
-            string output = ProcessTemplate(data,"ABC Company","Jayaraj","18th Street, Nehru Nagar","Karaikudi, Tamilnadu-630105","Chennai","John");
+            var colId = HttpContext.User.FindFirst("CollegeId");
+            string output = _studRepo.ProcessTemplate(data, Convert.ToInt32(studId), Convert.ToInt32(colId.Value.ToString()));
             // create a new pdf document converting an url
             PdfDocument doc = converter.ConvertHtmlString(output);
 
@@ -245,7 +319,7 @@ namespace Placement.Portal.Skillup.Controllers
 
             // close pdf document
             doc.Close();
-            
+
             return Json(new { data = pdf });
         }
 
@@ -351,19 +425,21 @@ namespace Placement.Portal.Skillup.Controllers
                 ";
         }
 
-        private string ProcessTemplate(string data, string CompanyName, string CandidateName, string CandidateAddress
-            ,string CandidateCityStateZip, string Workplacelocation, string Signature) 
-        {
-            data = data.Replace("[CompanyName]", CompanyName);
-            data = data.Replace("[OfferDate]", DateTime.Now.ToString("MM/dd/yyyy"));
-            data = data.Replace("[CandidateName]", CandidateName);
-            data = data.Replace("[CandidateAddress]", CandidateAddress);
-            data = data.Replace("[CandidateCityStateZip]", CandidateCityStateZip);
-            data = data.Replace("[Startdate]", DateTime.Now.AddDays(60).ToString("MM/dd/yyyy"));
-            data = data.Replace("[Workplacelocation]", Workplacelocation);
-            data = data.Replace("[OfferExpirationDate]", DateTime.Now.AddDays(30).ToString("MM/dd/yyyy"));
-            data = data.Replace("[Signature]", Signature);
-            return data;
-        }
+        //private string ProcessTemplate(string data, string CompanyName, string CandidateName, string CandidateAddress
+        //    ,string CandidateCityStateZip, string Workplacelocation, string Signature) 
+        //{
+        //    data = data.Replace("[CompanyName]", CompanyName);
+        //    data = data.Replace("[OfferDate]", DateTime.Now.ToString("MM/dd/yyyy"));
+        //    data = data.Replace("[CandidateName]", CandidateName);
+        //    data = data.Replace("[CandidateAddress]", CandidateAddress);
+        //    data = data.Replace("[CandidateCityStateZip]", CandidateCityStateZip);
+        //    data = data.Replace("[Startdate]", DateTime.Now.AddDays(60).ToString("MM/dd/yyyy"));
+        //    data = data.Replace("[Workplacelocation]", Workplacelocation);
+        //    data = data.Replace("[OfferExpirationDate]", DateTime.Now.AddDays(30).ToString("MM/dd/yyyy"));
+        //    data = data.Replace("[Signature]", Signature);
+        //    return data;
+        //}
     }
+
+
 }
