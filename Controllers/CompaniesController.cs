@@ -49,6 +49,8 @@ namespace Placement.Portal.Skillup.Controllers
 
         public IActionResult ViewRequests()
         {
+            ViewBag.CompanyName = HttpContext.User.FindFirst("CompanyName").Value;
+            ViewBag.UserName = HttpContext.User.Identity.Name;
             return View("CompanyRequest");
         }
 
@@ -251,6 +253,7 @@ namespace Placement.Portal.Skillup.Controllers
         {
             ViewBag.UserName = HttpContext.User.Identity.Name;
             var CompanyId = HttpContext.User.FindFirst("CompanyId").Value;
+            ViewBag.CompanyName = HttpContext.User.FindFirst("CompanyName").Value;
             CandidatesViewModel CandidatesViewModel = GetCandidatesViewModel();
 
             var studentList = _unitOfWork.CompanyRequestRepository
@@ -267,6 +270,7 @@ namespace Placement.Portal.Skillup.Controllers
             StudentInterviewRoundModel model = new();
             model.StudentId = studentId;
             model.StudentsInterViewScheduleDetailsId = studentsInterViewScheduleDetailsId;
+            ViewBag.CompanyName = HttpContext.User.FindFirst("CompanyName").Value;
             return PartialView(nameof(EditStudentInterviewRound), model);
         }
 

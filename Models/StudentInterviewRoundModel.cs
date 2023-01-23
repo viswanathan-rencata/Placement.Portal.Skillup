@@ -9,9 +9,11 @@ namespace Placement.Portal.Skillup.Models
         {
             Status = new List<SelectListItem> {
                 new SelectListItem { Text = "Select", Value = "0", Selected = true },
-                new SelectListItem { Text = "Selected", Value = "1" },
-                new SelectListItem { Text = "Inprogress", Value = "2" },
-                new SelectListItem { Text = "Rejected", Value = "3" }
+                new SelectListItem { Text = "Round1", Value = "1" },                
+                new SelectListItem { Text = "Round2", Value = "2" },
+                new SelectListItem { Text = "Round3", Value = "3" },
+                new SelectListItem { Text = "Selected", Value = "4" },
+                new SelectListItem { Text = "Rejected", Value = "5" },
             };
         }
         [Required(ErrorMessage = "Please Enter feedback.")]

@@ -79,7 +79,7 @@ namespace Placement.Portal.Skillup.Data
 
         public void AddOrUpdateStatus(StudentInterviewRound obj)
         {
-            var status = _dbContext.StudentInterviewRound.Where(x => x.StudentsInterViewScheduleDetails == obj.StudentsInterViewScheduleDetails
+            var status = _dbContext.StudentInterviewRound.ToList().Where(x => x.StudentsInterViewScheduleDetails == obj.StudentsInterViewScheduleDetails
             && x.StudentId == obj.StudentId).FirstOrDefault();
             if(status != null)
             {

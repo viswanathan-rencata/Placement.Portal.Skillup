@@ -21,7 +21,7 @@ namespace Placement.Portal.Skillup.Models
         public int? RoundNo { get; set; }
 
         [Column("Status")]
-        public Int32? Status { get; set; }
+        public int? Status { get; set; }
 
         [Column("CreateAt")]
         public int? CreateAt { get; set; }
