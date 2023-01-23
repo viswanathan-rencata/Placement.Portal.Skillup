@@ -26,7 +26,7 @@ namespace Placement.Portal.Skillup.Controllers
         public async Task<IActionResult> Index()
         {
             var username = HttpContext.User.Identity.Name;
-            var customClaim = HttpContext.User.FindFirst("CompanyOrCollege");            
+            var customClaim = HttpContext.User.FindFirst("CompanyOrCollege");
 
             ViewBag.UserName = username;
             List<CompanyRequest> cr = _unitOfWork.CompanyRequestRepository.GetCompanyRequest(Convert.ToInt16(HttpContext.User.FindFirst("CompanyId").Value.ToString())); 
@@ -231,6 +231,37 @@ namespace Placement.Portal.Skillup.Controllers
             }
         }
 
+        [Authorize]
+        public IActionResult Candidates()
+        {
+            ViewBag.UserName = HttpContext.User.Identity.Name;
+            CandidatesViewModel CandidatesViewModel = GetCandidatesViewModel();
+            return View(CandidatesViewModel);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult Candidates(CandidatesViewModel model)
+        {
+            ViewBag.UserName = HttpContext.User.Identity.Name;
+            var CompanyId = HttpContext.User.FindFirst("CompanyId").Value;
+            CandidatesViewModel CandidatesViewModel = GetCandidatesViewModel();
+
+            var studentList = _unitOfWork.CompanyRequestRepository
+                .GetInterviewCandidatesList(Convert.ToInt32(CompanyId), Convert.ToInt32(model.CollegeId));
+
+            CandidatesViewModel.CandidatesGrid = studentList;
+
+            return View(CandidatesViewModel);
+        }
+
+        [Authorize]
+        public IActionResult EditStudentInterviewRound(long StudentId, int studentsInterViewScheduleDetailsId)
+        {
+
+            return PartialView(nameof(EditStudentInterviewRound));
+        }
+
         private List<SelectListItem> GetCollegeDropDownItems(List<CollegeMaster> list)
         {
             List<SelectListItem> dropdownList = new();
@@ -248,6 +279,25 @@ namespace Placement.Portal.Skillup.Controllers
             var cmpReqList = _unitOfWork.CollegeMasterRepository.GetAll();
             companyRequestVM.College = GetCollegeDropDownItems(cmpReqList);
             return companyRequestVM;
+        }
+
+        private CandidatesViewModel GetCandidatesViewModel()
+        {
+            var candidatesViewModel = new CandidatesViewModel();
+            var clgList = _unitOfWork.CollegeMasterRepository.GetAll();
+            candidatesViewModel.College = GetClgDropDownItems(clgList);            
+            return candidatesViewModel;
+        }
+
+        private List<SelectListItem> GetClgDropDownItems(List<CollegeMaster> list)
+        {
+            List<SelectListItem> dropdownList = new();
+            dropdownList.Add(new SelectListItem { Text = "Select", Value = "0", Selected = true });
+            foreach (var item in list)
+            {
+                dropdownList.Add(new SelectListItem { Text = item.Name, Value = item.ID.ToString() });
+            }
+            return dropdownList;
         }
     }
 }

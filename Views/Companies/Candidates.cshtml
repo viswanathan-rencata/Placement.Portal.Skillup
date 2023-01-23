@@ -1,0 +1,98 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@{
+    Layout = "_CompanyLayout";
+}
+
+@model CandidatesViewModel;
+
+<form asp-action="Candidates" method="post">
+    <div class="form-floating mb-3" style="margin-top:50px">
+        <select asp-for="CollegeId" asp-items="@Model.College" class="form-control"></select>
+        <label asp-for="CollegeId">College</label>
+        <span asp-validation-for="College" class="text-danger"></span>
+    </div>
+    <div class="d-grid">
+        <button class="btn btn-lg btn-primary btn-login text-uppercase fw-bold mb-2" type="submit">Filter</button>
+    </div>
+</form>
+
+<table class="table table-bordered" style="margin-top:50px">
+    <thead>
+        <tr>
+            <th scope="col">Student First Name</th>
+            <th scope="col">Student Last Name</th>
+            <th scope="col">DOB</th>
+            <th scope="col">Email</th>
+            <th scope="col">PhoneNumber</th>
+            <th scope="col">Dept</th>
+            <th scope="col">Percentage</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.CandidatesGrid)
+        {
+            <tr>
+                <td>@item.FirstName</td>
+                <td>@item.LastName</td>
+                <td>@item.DOB</td>
+                <td>@item.Email</td>
+                <td>@item.PhoneNumber</td>
+                <td>@item.Dept</td>
+                <td>@item.Percentage</td>
+                <td>
+                    <button type="button" class="btn btn-info" onclick="myFunction(@item.Id, @item.StudentsInterViewScheduleDetailsId)">
+                        <span class="glyphicon glyphicon-edit"></span> Edit
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="modal fade" id="studentModal" tabindex="-1" aria-labelledby="studentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="studentModalLabel">Save Round Details</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <div class="text-center"><button id="btnusrPrfSubmit" class="btn btn-primary profile-button" type="button">Save Profile</button></div>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function myFunction(studentId, studentsInterViewScheduleDetailsId) {
+        $.ajax({
+            type: "GET",
+            url: "/Companies/EditStudentInterviewRound",
+            data: {
+                StudentId: studentId,
+                StudentsInterViewScheduleDetailsId: studentsInterViewScheduleDetailsId
+            },
+            contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+            dataType: "html",
+            success: function (response) {
+                debugger;
+                $("#studentModal").find(".modal-body").html(response);
+                $("#studentModal").modal('show');
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+</script>
