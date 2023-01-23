@@ -20,7 +20,12 @@
         public string Address { get; set; }
         public int Age { get; set; }
         public long PhoneNumber { get; set; }
-        public decimal Percentage { get; set; } 
+        public decimal Percentage { get; set; }
 
+    }
+    public class StudentsDropdown
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 }
