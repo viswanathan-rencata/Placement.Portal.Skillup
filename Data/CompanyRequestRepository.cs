@@ -1,9 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Caching.Memory;
 using Placement.Portal.Skillup.Interface.Data;
 using Placement.Portal.Skillup.Models;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
+using System.Linq;
+using static Placement.Portal.Skillup.Models.Enum;
 
 namespace Placement.Portal.Skillup.Data
 {
@@ -20,9 +23,83 @@ namespace Placement.Portal.Skillup.Data
             await _dbContext.AddAsync(companyRequest);
         }
 
-        public async Task<List<CompanyRequest>> GetCompanyRequestAsync(int companyId)
+        public List<CompanyRequest> GetCompanyRequest(int companyId)
         {
-            return await _dbContext.CompanyRequest.Where(x => x.CompanyId == companyId).ToListAsync();
+            var companyRequest = _dbContext.CompanyRequest;
+            var companyMaster = _dbContext.CompanyMaster;
+            var collegeMaster = _dbContext.CollegeMaster;
+
+            var companyRequestValue = (from cr in companyRequest
+                               join cm in companyMaster on cr.CompanyId equals cm.ID
+                               join colm in collegeMaster on cr.CollegeId equals colm.ID
+                               select new CompanyRequest
+                               {
+                                   CompanyName = cm.Name,
+                                   CollegeName = colm.Name,
+                                   RequestDate = cr.RequestDate,
+                                   Department = cr.Department,
+                                   CoreAreas = cr.CoreAreas,
+                                   Percentage = cr.Percentage,
+                                   Comments = cr.Comments
+
+                               }).ToList();
+
+            return companyRequestValue;
+            //return await _dbContext.CompanyRequest.Where(x => x.CompanyId == companyId).ToListAsync();
+        }
+
+        public List<CandidatesGrid> GetInterviewCandidatesList(int companyId, int collegeId)
+        {
+            List<CandidatesGrid> List = new();
+            var IniterviewSchedule = _dbContext.StudentsInterViewScheduleDetails
+                .Where(x=>x.CompanyId == companyId && x.CollegeId == collegeId).ToList();
+
+            var StudentIDList = IniterviewSchedule.Select(x => x.StudentId).ToList();
+
+            var StudentList = _dbContext.Students.ToList()
+                .Where(x=> StudentIDList.Contains(x.Id)).ToList();
+
+            foreach(var item in StudentList)
+            {
+                CandidatesGrid obj = new();
+                obj.Id = item.Id;
+                obj.FirstName = item.FirstName;
+                obj.LastName = item.LastName;
+                obj.DOB = item.DOB;
+                obj.Email = item.Email;
+                obj.PhoneNumber = item.PhoneNumber;
+                obj.Dept = item.Dept;
+                obj.Percentage = item.Percentage;
+                obj.StudentsInterViewScheduleDetailsId = IniterviewSchedule.Select(x => x.ID).FirstOrDefault();
+                List.Add(obj);
+            }
+
+            return List;
+        }
+
+        public void AddOrUpdateStatus(StudentInterviewRound obj)
+        {
+            var status = _dbContext.StudentInterviewRound.ToList().Where(x => x.StudentsInterViewScheduleDetails == obj.StudentsInterViewScheduleDetails
+            && x.StudentId == obj.StudentId).FirstOrDefault();
+            if(status != null)
+            {
+                status.Feedback = obj.Feedback;
+                status.Status= obj.Status;
+                status.StudentId = obj.StudentId;
+            }
+            else
+            {
+                _dbContext.StudentInterviewRound.Add(obj);
+            }
+
+            var Student = _dbContext.Students.FirstOrDefault(x=>x.Id == obj.StudentId);
+            if(Student != null)
+            {
+                var enumDisplayStatus = (InterviewStatus)obj.Status;
+                string statusValue = enumDisplayStatus.ToString();
+                Student.Status = statusValue;
+                _dbContext.Students.Update(Student);
+            }
         }
 
        

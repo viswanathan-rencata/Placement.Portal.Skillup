@@ -21,18 +21,20 @@ namespace Placement.Portal.Skillup.Controllers
         {
             _unitOfWork = unitOfWork;
         }
-        
+
         [Authorize]
         public async Task<IActionResult> Index()
         {
             var username = HttpContext.User.Identity.Name;
-            var customClaim = HttpContext.User.FindFirst("CompanyOrCollege");            
+            var customClaim = HttpContext.User.FindFirst("CompanyOrCollege");
 
             ViewBag.UserName = username;
-            List<CompanyRequest> cr = await _unitOfWork.CompanyRequestRepository.GetCompanyRequestAsync(Convert.ToInt16(HttpContext.User.FindFirst("CompanyId").Value.ToString())); 
+            ViewBag.CompanyName = HttpContext.User.FindFirst("CompanyName").Value;
+
+            List<CompanyRequest> cr = _unitOfWork.CompanyRequestRepository.GetCompanyRequest(Convert.ToInt16(HttpContext.User.FindFirst("CompanyId").Value.ToString()));
             return View(cr);
         }
-        
+
         public IActionResult Login()
         {
             LoginViewModel model = new();
@@ -47,13 +49,9 @@ namespace Placement.Portal.Skillup.Controllers
 
         public IActionResult ViewRequests()
         {
-            return View("Index");
-
-            //AppDBContext dBContext = new AppDBContext();
-
-            //var data = dBContext.CompanyRequest;
-            
-            //return View (data.ToList());
+            ViewBag.CompanyName = HttpContext.User.FindFirst("CompanyName").Value;
+            ViewBag.UserName = HttpContext.User.Identity.Name;
+            return View("CompanyRequest");
         }
 
         [HttpPost]
@@ -102,7 +100,7 @@ namespace Placement.Portal.Skillup.Controllers
                 else
                 {
                     return View(GetCompanyRegisterViewModel(true));
-                }                
+                }
             }
             else
             {
@@ -149,12 +147,15 @@ namespace Placement.Portal.Skillup.Controllers
                     return View(model);
                 }
 
+                var companyName = _unitOfWork.CompanyMasterRepository.GetCompanyById(user.CompanyId.Value);
+
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, user.UserName),
                     new Claim(ClaimTypes.Email, user.Email),
                     new Claim("CompanyOrCollege", user.CompanyOrCollege.ToString()),
-                    new Claim("CompanyId", user.CompanyId.ToString())
+                    new Claim("CompanyId", user.CompanyId.ToString()),
+                    new Claim("CompanyName", companyName.Name)
                 };
 
                 var claimsIdentity = new ClaimsIdentity(
@@ -212,12 +213,12 @@ namespace Placement.Portal.Skillup.Controllers
 
             if (ModelState.IsValid)
             {
-                
                 var companyReq = new CompanyRequest
                 {
-                    CollegeName = "Southwest Wisconsin Technical College",
+                    CompanyId = Convert.ToInt16(HttpContext.User.FindFirst("CompanyId").Value),
+                    CollegeId = Convert.ToInt16(model.CollegeName),
                     RequestDate = model.RequestDate,
-                    Department = "Electronics",
+                    Department = model.Department,
                     CoreAreas = model.CoreAreas,
                     Percentage = model.CGPAPercent,
                     Comments = model.Comments
@@ -225,7 +226,7 @@ namespace Placement.Portal.Skillup.Controllers
 
                 await _unitOfWork.CompanyRequestRepository.AddCompanyRequestAsync(companyReq);
 
-                if (await _unitOfWork.Complete()) return View(GetCompanyRequestViewModel());
+                if (await _unitOfWork.Complete()) return RedirectToAction("Index", "Companies");
                 else
                 {
                     return View(GetCompanyRequestViewModel());
@@ -235,6 +236,67 @@ namespace Placement.Portal.Skillup.Controllers
             {
                 return View(GetCompanyRequestViewModel());
             }
+        }
+
+        [Authorize]
+        public IActionResult Candidates()
+        {
+            ViewBag.UserName = HttpContext.User.Identity.Name;
+            ViewBag.CompanyName = HttpContext.User.FindFirst("CompanyName").Value;
+            CandidatesViewModel CandidatesViewModel = GetCandidatesViewModel();
+            return View(CandidatesViewModel);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult Candidates(CandidatesViewModel model)
+        {
+            ViewBag.UserName = HttpContext.User.Identity.Name;
+            var CompanyId = HttpContext.User.FindFirst("CompanyId").Value;
+            ViewBag.CompanyName = HttpContext.User.FindFirst("CompanyName").Value;
+            CandidatesViewModel CandidatesViewModel = GetCandidatesViewModel();
+
+            var studentList = _unitOfWork.CompanyRequestRepository
+                .GetInterviewCandidatesList(Convert.ToInt32(CompanyId), Convert.ToInt32(model.CollegeId));
+
+            CandidatesViewModel.CandidatesGrid = studentList;
+
+            return View(CandidatesViewModel);
+        }
+
+        [Authorize]
+        public IActionResult EditStudentInterviewRound(long studentId, int studentsInterViewScheduleDetailsId)
+        {
+            StudentInterviewRoundModel model = new();
+            model.StudentId = studentId;
+            model.StudentsInterViewScheduleDetailsId = studentsInterViewScheduleDetailsId;
+            ViewBag.CompanyName = HttpContext.User.FindFirst("CompanyName").Value;
+            return PartialView(nameof(EditStudentInterviewRound), model);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> EditStudentInterviewRound(StudentInterviewRoundModel model)
+        {
+            if (model.StatusId == "0")
+            {
+                ModelState.AddModelError("Company", "Please select status");
+            }
+
+            if (ModelState.IsValid)
+            {
+                StudentInterviewRound obj = new StudentInterviewRound();
+                obj.Feedback = model.FeedBack;
+                obj.Status = Convert.ToInt16(model.StatusId);
+                obj.StudentId = Convert.ToInt64(model.StudentId);
+                obj.StudentsInterViewScheduleDetails = model.StudentsInterViewScheduleDetailsId;
+
+                _unitOfWork.CompanyRequestRepository.AddOrUpdateStatus(obj);
+                await _unitOfWork.Complete();
+                model.IsStatusUpdateSuccess = true;
+                model.UpdateSuccess = "Updated Successfully.";
+            }
+            return PartialView(nameof(EditStudentInterviewRound), model);
         }
 
         private List<SelectListItem> GetCollegeDropDownItems(List<CollegeMaster> list)
@@ -254,6 +316,25 @@ namespace Placement.Portal.Skillup.Controllers
             var cmpReqList = _unitOfWork.CollegeMasterRepository.GetAll();
             companyRequestVM.College = GetCollegeDropDownItems(cmpReqList);
             return companyRequestVM;
+        }
+
+        private CandidatesViewModel GetCandidatesViewModel()
+        {
+            var candidatesViewModel = new CandidatesViewModel();
+            var clgList = _unitOfWork.CollegeMasterRepository.GetAll();
+            candidatesViewModel.College = GetClgDropDownItems(clgList);
+            return candidatesViewModel;
+        }
+
+        private List<SelectListItem> GetClgDropDownItems(List<CollegeMaster> list)
+        {
+            List<SelectListItem> dropdownList = new();
+            dropdownList.Add(new SelectListItem { Text = "Select", Value = "0", Selected = true });
+            foreach (var item in list)
+            {
+                dropdownList.Add(new SelectListItem { Text = item.Name, Value = item.ID.ToString() });
+            }
+            return dropdownList;
         }
     }
 }

@@ -1,14 +1,32 @@
-﻿namespace Placement.Portal.Skillup.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Placement.Portal.Skillup.Models
 {
+    [Table("StudentInterviewRound")]
     public class StudentInterviewRound
     {
-        public int Id { get; set; }
+        [Column("ID")]
+        public int ID { get; set; }
+
+        [Column("StudentsInterViewScheduleDetails")]
         public int StudentsInterViewScheduleDetails { get; set; }
-        public string feedback { get; set; }
+
+        [Column("StudentId")]
         public long StudentId { get; set; }
-        public DateTime? CreateAt { get; set; }
-        public long? CreatedBy { get; set; }
+
+        [Column("Feedback")]
+        public string Feedback { get; set; }
+
+        [Column("RoundNo")]
         public int? RoundNo { get; set; }
+
+        [Column("Status")]
         public int? Status { get; set; }
+
+        [Column("CreateAt")]
+        public int? CreateAt { get; set; }
+
+        [Column("CreatedBy")]
+        public int? CreatedBy { get; set; }
     }
 }
